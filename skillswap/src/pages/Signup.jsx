@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import { Box, Button, Card, Container, TextField, Typography, Stack, Grid } from "@mui/material";
-import { Fade } from "@mui/material";
-import SignupIllustration from "../assets/signup.jpg"; // Replace with your own image
+import { Container, TextField, Button, Typography, Card } from "@mui/material";
 
 const Signup = () => {
   const { signup } = useAuth();
@@ -23,60 +21,90 @@ const Signup = () => {
   };
 
   return (
-    <Fade in timeout={800}>
-      <Container maxWidth="md">
-        <Card sx={{ display: "flex", overflow: "hidden", borderRadius: 3, boxShadow: 5 }}>
-          {/* Left Side - Illustration */}
-          <Grid container>
-            <Grid item xs={12} md={6} sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", justifyContent: "center", bgcolor: "#84ac64" }}>
-              <img src={SignupIllustration} alt="Signup" style={{ width: "80%" }} />
-            </Grid>
+    <Container
+      maxWidth="xs"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Card
+        sx={{
+          width: "100%",
+          p: 4,
+          bgcolor: "#0d1117",
+          color: "#ffffff",
+          border: "1px solid #30363d",
+          boxShadow: "none",
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" textAlign="center" mb={3}>
+          Create your SkillSwap account
+        </Typography>
 
-            {/* Right Side - Form */}
-            <Grid item xs={12} md={6} sx={{ p: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
-                Create Your Account
-              </Typography>
-              <Stack spacing={2} component="form" onSubmit={handleSubmit} width="100%">
-                <TextField
-                  label="Username"
-                  variant="outlined"
-                  fullWidth
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-                <TextField
-                  label="Email"
-                  type="email"
-                  variant="outlined"
-                  fullWidth
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <TextField
-                  label="Password"
-                  type="password"
-                  variant="outlined"
-                  fullWidth
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <Button type="submit" variant="contained" color="secondary" sx={{ py: 1.5 }}>
-                  Sign Up
-                </Button>
-              </Stack>
-              <Typography variant="body2" sx={{ mt: 2 }}>
-                Already have an account?{" "}
-                <Link to="/login" style={{ color: "#4ab7e0", textDecoration: "none" }}>Login</Link>
-              </Typography>
-            </Grid>
-          </Grid>
-        </Card>
-      </Container>
-    </Fade>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Username"
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{ style: { color: "#8b949e" } }}
+            InputProps={{ style: { background: "#161b22", color: "#ffffff" } }}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            sx={{ mb: 2 }}
+          />
+
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{ style: { color: "#8b949e" } }}
+            InputProps={{ style: { background: "#161b22", color: "#ffffff" } }}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            sx={{ mb: 2 }}
+          />
+
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{ style: { color: "#8b949e" } }}
+            InputProps={{ style: { background: "#161b22", color: "#ffffff" } }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            sx={{ mb: 3 }}
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              bgcolor: "#238636",
+              "&:hover": { bgcolor: "#2ea043" },
+              py: 1.5,
+            }}
+          >
+            Sign Up
+          </Button>
+
+          <Typography variant="body2" textAlign="center" sx={{ mt: 2 }}>
+            Already have an account?{" "}
+            <Link to="/login" style={{ color: "#58a6ff", textDecoration: "none" }}>
+              Sign In
+            </Link>
+          </Typography>
+        </form>
+      </Card>
+    </Container>
   );
 };
 
