@@ -15,7 +15,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../config/firebase"; // Make sure this is correctly imported
+import { auth } from "../config/firebase"; // Firebase config
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const Navbar = () => {
@@ -24,14 +24,13 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState(null);
 
-  // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log("Auth State Changed:", currentUser);
       setUser(currentUser);
     });
 
-    return () => unsubscribe(); // Cleanup listener on unmount
+    return () => unsubscribe();
   }, []);
 
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
@@ -83,6 +82,7 @@ const Navbar = () => {
               <Button color="inherit" sx={navButtonStyle} onClick={() => navigate("/matchmaking")}>
                 Matchmaking
               </Button>
+              
               <Button color="inherit" sx={navButtonStyle} onClick={() => navigate("/blog")}>
                 Blog
               </Button>
@@ -136,6 +136,7 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
 
+      {/* Mobile Drawer */}
       <Drawer
         anchor="left"
         open={mobileOpen}
@@ -153,9 +154,8 @@ const Navbar = () => {
               <ListItem button onClick={() => navigate("/")}>
                 <ListItemText primary="Home" />
               </ListItem>
-              <ListItem button onClick={() => navigate("/matchmaking")}>
-                <ListItemText primary="Matchmaking" />
-              </ListItem>
+              
+              
               <ListItem button onClick={() => navigate("/blog")}>
                 <ListItemText primary="Blog" />
               </ListItem>

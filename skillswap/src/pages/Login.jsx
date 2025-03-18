@@ -1,21 +1,49 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import { Container, TextField, Button, Typography, Box, Card } from "@mui/material";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Card,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage(null);
+    setError(null);
+    setLoading(true);
+
     try {
       await login(email, password);
-      navigate("/dashboard");
-    } catch (error) {
-      alert("Invalid email or password.");
+      setMessage("Login successful! Redirecting...");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (err) {
+      setLoading(false);
+      if (err.code === "auth/user-not-found") {
+        setError("User not found. Please check your email.");
+      } else if (err.code === "auth/wrong-password") {
+        setError("Incorrect password. Try again.");
+      } else if (err.code === "auth/invalid-email") {
+        setError("Invalid email format.");
+      } else {
+        setError("Login failed. Please try again.");
+      }
     }
   };
 
@@ -39,9 +67,29 @@ const Login = () => {
           boxShadow: "none",
         }}
       >
-        <Typography variant="h5" fontWeight="bold" textAlign="center" mb={3}>
+        <Typography variant="h5" fontWeight="bold" textAlign="center" mb={2}>
           Sign in to SkillSwap
         </Typography>
+
+        <Typography
+          variant="body2"
+          textAlign="center"
+          sx={{ color: "#8b949e", mb: 3 }}
+        >
+          Exchange skills, grow together.
+        </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2, bgcolor: "#ff7b72", color: "#0d1117" }}>
+            {error}
+          </Alert>
+        )}
+
+        {message && (
+          <Alert severity="success" sx={{ mb: 2, bgcolor: "#238636", color: "#ffffff" }}>
+            {message}
+          </Alert>
+        )}
 
         <form onSubmit={handleSubmit}>
           <TextField
@@ -50,11 +98,20 @@ const Login = () => {
             fullWidth
             variant="outlined"
             InputLabelProps={{ style: { color: "#8b949e" } }}
-            InputProps={{ style: { background: "#161b22", color: "#ffffff" } }}
+            InputProps={{
+              style: { background: "#161b22", color: "#ffffff" },
+            }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            sx={{ mb: 2 }}
+            sx={{
+              mb: 2,
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "#30363d" },
+                "&:hover fieldset": { borderColor: "#58a6ff" },
+                "&.Mui-focused fieldset": { borderColor: "#58a6ff" },
+              },
+            }}
           />
 
           <TextField
@@ -63,24 +120,36 @@ const Login = () => {
             fullWidth
             variant="outlined"
             InputLabelProps={{ style: { color: "#8b949e" } }}
-            InputProps={{ style: { background: "#161b22", color: "#ffffff" } }}
+            InputProps={{
+              style: { background: "#161b22", color: "#ffffff" },
+            }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            sx={{ mb: 3 }}
+            sx={{
+              mb: 3,
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "#30363d" },
+                "&:hover fieldset": { borderColor: "#58a6ff" },
+                "&.Mui-focused fieldset": { borderColor: "#58a6ff" },
+              },
+            }}
           />
 
           <Button
             type="submit"
             fullWidth
             variant="contained"
+            disabled={loading}
             sx={{
               bgcolor: "#238636",
-              "&:hover": { bgcolor: "#2ea043" },
               py: 1.5,
+              fontWeight: "bold",
+              "&:hover": { bgcolor: "#2ea043" },
+              "&:active": { transform: "scale(0.98)" },
             }}
           >
-            Sign In
+            {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Sign In"}
           </Button>
 
           <Typography variant="body2" textAlign="center" sx={{ mt: 2 }}>
