@@ -227,6 +227,7 @@ const Dashboard = () => {
           <Button variant="text" color="error" fullWidth startIcon={<LogoutIcon />} onClick={logout}>Logout</Button>
         </CardContent>
       </Card>
+      
     </Box>
   );
 };
