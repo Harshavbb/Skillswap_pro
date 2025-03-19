@@ -38,10 +38,23 @@ export const sendMatchRequest = async (sender, receiver) => {
       // ✅ Both users have sent requests → update both requests to "matched"
       const reverseRequestDoc = reverseRequest.docs[0];
       const requestRef = doc(db, "matchRequests", reverseRequestDoc.id);
-
       await updateDoc(requestRef, { status: "matched" });
 
-      console.log("🎉 Skill Swap Confirmed!");
+      // ✅ Ensure sender's request is updated too
+      const senderRequestQuery = query(
+        matchRequestsRef,
+        where("senderId", "==", sender.uid),
+        where("receiverId", "==", receiver.uid)
+      );
+
+      const senderRequest = await getDocs(senderRequestQuery);
+      if (!senderRequest.empty) {
+        const senderRequestDoc = senderRequest.docs[0];
+        const senderRequestRef = doc(db, "matchRequests", senderRequestDoc.id);
+        await updateDoc(senderRequestRef, { status: "matched" });
+      }
+
+      console.log("🎉 Skill Swap Confirmed for both sender and receiver!");
       return { success: true, message: "🎉 Skill Swap Confirmed!" };
     } else {
       // 🆕 If no reverse request, create a new request

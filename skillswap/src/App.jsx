@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import MatchmakingPage from "./pages/MatchmakingPage"; // Import MatchmakingPage
+import MatchRequestsPage from "./pages/MatchRequestsPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/match-requests" element={<MatchRequestsPage />} />
 
             <Route
               path="/dashboard"

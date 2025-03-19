@@ -13,6 +13,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Link } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase"; // Firebase config
@@ -86,6 +87,10 @@ const Navbar = () => {
               <Button color="inherit" sx={navButtonStyle} onClick={() => navigate("/blog")}>
                 Blog
               </Button>
+              <Button component={Link} to="/match-requests" variant="contained" sx={{ bgcolor: "#4dabf7", color: "#fff" }}>
+    Match Requests
+</Button>
+
 
               <IconButton color="inherit" onClick={handleMenuOpen}>
                 <AccountCircleIcon sx={{ fontSize: 26 }} />
