@@ -49,10 +49,11 @@ const Navbar = () => {
       <AppBar
         position="sticky"
         sx={{
-          backgroundColor: "#000000",
-          color: "#ffffff",
+          backgroundColor: "#ffffff",
+          color: "#333",
           boxShadow: "none",
-          borderBottom: "1px solid #333",
+          //borderBottom: "1px solid #ddd",
+          padding: "8px 16px",
         }}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
@@ -69,7 +70,7 @@ const Navbar = () => {
           <Typography
             variant="h6"
             fontWeight="bold"
-            sx={{ flexGrow: 1, cursor: "pointer" }}
+            sx={{ flexGrow: 1, cursor: "pointer", color: "#000" }}
             onClick={() => navigate("/")}
           >
             SkillSwap
@@ -77,23 +78,25 @@ const Navbar = () => {
 
           {user ? (
             <>
-              <Button color="inherit" sx={navButtonStyle} onClick={() => navigate("/")}>
-                Home
+              <Button sx={navButtonStyle} onClick={() => navigate("/")}>Home</Button>
+              <Button sx={navButtonStyle} onClick={() => navigate("/matchmaking")}>Matchmaking</Button>
+              <Button sx={navButtonStyle} onClick={() => navigate("/blog")}>Blog</Button>
+              <Button
+                sx={{
+                  backgroundColor: "#f7e154",
+                  color: "#111111", // Ensure readable text
+                  "&:hover": {
+                    backgroundColor: "#e0c217", // Slightly darker yellow for hover effect
+                  },
+                }}
+                onClick={() => navigate("/match-requests")}
+              >
+                Match Requests
               </Button>
-              <Button color="inherit" sx={navButtonStyle} onClick={() => navigate("/matchmaking")}>
-                Matchmaking
-              </Button>
-              
-              <Button color="inherit" sx={navButtonStyle} onClick={() => navigate("/blog")}>
-                Blog
-              </Button>
-              <Button component={Link} to="/match-requests" variant="contained" sx={{ bgcolor: "#4dabf7", color: "#fff" }}>
-    Match Requests
-</Button>
 
 
               <IconButton color="inherit" onClick={handleMenuOpen}>
-                <AccountCircleIcon sx={{ fontSize: 26 }} />
+                <AccountCircleIcon sx={{ fontSize: 26, color: "#000" }} />
               </IconButton>
               <Menu
                 anchorEl={anchorEl}
@@ -101,8 +104,9 @@ const Navbar = () => {
                 onClose={handleMenuClose}
                 sx={{
                   "& .MuiPaper-root": {
-                    backgroundColor: "#1c1c1c",
-                    color: "#ffffff",
+                    backgroundColor: "#ffffff",
+                    color: "#333",
+                    border: "1px solid #ddd",
                   },
                 }}
               >
@@ -112,28 +116,9 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Button color="inherit" sx={navButtonStyle} onClick={() => navigate("/")}>
-                Home
-              </Button>
-              <Button color="inherit" sx={navButtonStyle} onClick={() => navigate("/login")}>
-                Sign In
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{
-                  color: "#ffffff",
-                  borderColor: "#ffffff",
-                  fontSize: "0.95rem",
-                  fontWeight: "500",
-                  textTransform: "none",
-                  px: 2,
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    borderColor: "#ffffff",
-                  },
-                }}
-                onClick={() => navigate("/signup")}
-              >
+              <Button sx={navButtonStyle} onClick={() => navigate("/")}>Home</Button>
+              <Button sx={navButtonStyle} onClick={() => navigate("/login")}>Sign In</Button>
+              <Button variant="outlined" sx={outlinedButtonStyle} onClick={() => navigate("/signup")}>
                 Sign Up
               </Button>
             </>
@@ -148,8 +133,9 @@ const Navbar = () => {
         onClose={handleDrawerToggle}
         sx={{
           "& .MuiDrawer-paper": {
-            backgroundColor: "#1c1c1c",
-            color: "#ffffff",
+            backgroundColor: "#ffffff",
+            color: "#333",
+            borderRight: "1px solid #ddd",
           },
         }}
       >
@@ -159,8 +145,6 @@ const Navbar = () => {
               <ListItem button onClick={() => navigate("/")}>
                 <ListItemText primary="Home" />
               </ListItem>
-              
-              
               <ListItem button onClick={() => navigate("/blog")}>
                 <ListItemText primary="Blog" />
               </ListItem>
@@ -190,13 +174,34 @@ const Navbar = () => {
   );
 };
 
-// Button Style
+// **Button Styles**
 const navButtonStyle = {
-  fontSize: "0.95rem",
+  fontSize: "1rem",
+  fontWeight: "500",
+  color: "#333",
+  textTransform: "none",
+  px: 2,
+  "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.05)" },
+};
+
+const primaryButtonStyle = {
+  backgroundColor: "#4dabf7",
+  color: "#fff",
+  textTransform: "none",
+  "&:hover": { backgroundColor: "#1e88e5" },
+};
+
+const outlinedButtonStyle = {
+  color: "#333",
+  borderColor: "#333",
+  fontSize: "1rem",
   fontWeight: "500",
   textTransform: "none",
   px: 2,
-  "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+  "&:hover": {
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    borderColor: "#333",
+  },
 };
 
 export default Navbar;

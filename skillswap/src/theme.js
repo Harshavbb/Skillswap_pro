@@ -1,32 +1,39 @@
+// theme.js - Redesigned for Notion-like minimal UI
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: "light", // Light mode for a clean aesthetic
     primary: {
-      main: "#58a6ff", // GitHub's blue accent
+      main: "#111111", // Bold black for text and accents
     },
     secondary: {
-      main: "#8b949e", // Muted gray text color
+      main: "#6adb64", // Vibrant green for highlights
     },
     background: {
-      default: "#0d1117", // GitHub's pitch-black background
-      paper: "#161b22", // Darker card & modal background
+      default: "#ffffff", // Clean white background
+      paper: "#f7f7f7", // Light gray for subtle contrast
     },
     text: {
-      primary: "#c9d1d9", // White text
-      secondary: "#8b949e", // Muted gray
+      primary: "#111111", // Deep black for strong readability
+      secondary: "#555555", // Softer gray for muted text
     },
   },
   typography: {
-    fontFamily: "'Inter', sans-serif",
-    h4: {
-      fontWeight: 600,
-      color: "#c9d1d9",
+    fontFamily: "'poppins', sans-serif",
+    h1: {
+      fontSize: "2.5rem",
+      fontWeight: 700,
+      color: "#111111",
     },
-    body2: {
-      color: "#8b949e",
-      lineHeight: 1.6,
+    h2: {
+      fontSize: "2rem",
+      fontWeight: 600,
+      color: "#111111",
+    },
+    body1: {
+      fontSize: "1rem",
+      color: "#555555",
     },
     button: {
       textTransform: "none",
@@ -34,63 +41,29 @@ const theme = createTheme({
     },
   },
   components: {
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 10,
-          backgroundColor: "#161b22",
-          border: "1px solid #30363d",
-          boxShadow: "none",
-          transition: "all 0.2s ease-in-out",
-          "&:hover": {
-            borderColor: "#58a6ff",
-          },
-        },
-      },
-    },
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 6,
+          borderRadius: 8,
+          padding: "10px 20px",
+          fontSize: "1rem",
           fontWeight: 600,
-          color: "#c9d1d9",
-          //backgroundColor: "#21262d",
-          //border: "1px solid #30363d",
-          transition: "all 0.2s ease-in-out",
-          "&:hover": {
-            backgroundColor: "#30363d",
-            borderColor: "#58a6ff",
-          },
-          "&:active": {
-            transform: "scale(0.98)",
+          color: "#111111",
+          backgroundColor: "#ffffff",
+          transition: "all 0.3s",
+          '&:hover': {
+            backgroundColor: "#222222",
           },
         },
       },
     },
-    MuiTextField: {
+    MuiCard: {
       styleOverrides: {
         root: {
-          "& label": {
-            color: "#8b949e",
-          },
-          "& label.Mui-focused": {
-            color: "#58a6ff",
-          },
-          "& .MuiOutlinedInput-root": {
-            color: "#c9d1d9",
-            backgroundColor: "#0d1117",
-            borderRadius: 6,
-            "& fieldset": {
-              borderColor: "#30363d",
-            },
-            "&:hover fieldset": {
-              borderColor: "#58a6ff",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "#58a6ff",
-              boxShadow: "0px 0px 8px rgba(88, 166, 255, 0.2)",
-            },
-          },
+          borderRadius: 12,
+          padding: 20,
+          backgroundColor: "#ffffff",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.05)",
         },
       },
     },
@@ -98,4 +71,3 @@ const theme = createTheme({
 });
 
 export default theme;
-  

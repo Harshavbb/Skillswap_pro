@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { db, storage } from "../config/firebase";
+import { db } from "../config/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import profileImage from "../assets/profile2.jpg";
 import {
   Box,
   Card,
@@ -16,6 +16,7 @@ import {
   TextField,
   Tooltip,
   Divider,
+  Grid,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -28,27 +29,23 @@ const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [hoverProfilePic, setHoverProfilePic] = useState(false);
 
-  // Editable fields
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [twitter, setTwitter] = useState("");
   const [github, setGithub] = useState("");
   const [newSkill, setNewSkill] = useState("");
-  const [profilePic, setProfilePic] = useState(null);
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (!user) return;
       setLoading(true);
-  
       try {
         const userDocRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userDocRef);
-  
+
         if (userSnap.exists()) {
           const data = userSnap.data();
           setUserData(data);
@@ -57,7 +54,6 @@ const Dashboard = () => {
           setLinkedin(data.socialLinks?.linkedin || "");
           setTwitter(data.socialLinks?.twitter || "");
           setGithub(data.socialLinks?.github || "");
-          setProfilePic(data.profilePic || "");
           setSkills(data.skillsOffered || []);
         }
       } catch (err) {
@@ -65,31 +61,8 @@ const Dashboard = () => {
       }
       setLoading(false);
     };
-  
     fetchUserData();
   }, [user]);
-
-  const handleProfilePicUpload = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onloadend = async () => {
-    try {
-      const base64String = reader.result;
-      const userDocRef = doc(db, "users", user.uid);
-      await updateDoc(userDocRef, { profilePic: base64String });
-
-      setUserData((prev) => ({ ...prev, profilePic: base64String }));
-      setSuccessMessage("Profile picture updated!");
-    } catch (error) {
-      setError("Error updating profile picture.");
-    }
-  };
-};
-
-  
 
   const handleAddSkill = () => {
     if (newSkill.trim() !== "") {
@@ -98,28 +71,27 @@ const Dashboard = () => {
     }
   };
 
+  const handleRemoveSkill = (index) => {
+    setSkills(skills.filter((_, i) => i !== index));
+  };
+
   const handleSaveChanges = async () => {
     if (!user) return;
-  
     try {
       const userDocRef = doc(db, "users", user.uid);
       await updateDoc(userDocRef, {
         username,
         bio,
-        profilePic,
         skillsOffered: skills,
         socialLinks: { linkedin, twitter, github },
       });
-
       setUserData((prev) => ({
         ...prev,
         username,
         bio,
-        profilePic,
         skillsOffered: skills,
         socialLinks: { linkedin, twitter, github },
       }));
-
       setEditMode(false);
     } catch (err) {
       console.error("Error saving profile changes.");
@@ -128,106 +100,92 @@ const Dashboard = () => {
 
   return (
     <Box display="flex" justifyContent="center" mt={4}>
-      <Card sx={{ width: 500, p: 3 }}>
-        <CardContent>
-          {/* Profile Header */}
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Box
-              sx={{ position: "relative" }}
-              onMouseEnter={() => setHoverProfilePic(true)}
-              onMouseLeave={() => setHoverProfilePic(false)}
-            >
-              <Avatar src={profilePic || userData?.profilePic || ""} sx={{ width: 80, height: 80 }} />
-              {hoverProfilePic && editMode && (
-                <label htmlFor="profile-pic-upload">
-                  <Tooltip title="Upload Profile Picture">
-                    <IconButton
-                      component="span"
-                      sx={{
-                        position: "absolute",
-                        bottom: 0,
-                        right: 0,
-                        background: "rgba(0,0,0,0.5)",
-                        color: "white",
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
-                </label>
-              )}
-              <input type="file" accept="image/*" hidden id="profile-pic-upload" onChange={handleProfilePicUpload} />
-            </Box>
-            <Box>
+      <Card sx={{ width: 750, p: 4, boxShadow: 3, borderRadius: 3 }}>
+        <Grid container spacing={3} alignItems="center">
+          
+          {/* Left Side Static Image */}
+          <Grid item xs={12} sm={4} display="flex" justifyContent="center">
+            <img
+              src={profileImage} // Change this to your image path
+              alt="Dashboard Illustration"
+              style={{ width: "100%", maxWidth: "200px", borderRadius: "10px" }}
+            />
+          </Grid>
+
+          {/* Right Side - Profile Section */}
+          <Grid item xs={12} sm={8}>
+            <CardContent>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Avatar src={userData?.profilePic || ""} sx={{ width: 90, height: 90, boxShadow: 2 }} />
+                <Box>
+                  {editMode ? (
+                    <TextField fullWidth variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)} />
+                  ) : (
+                    <Typography variant="h5" fontWeight="bold">{username || user.email}</Typography>
+                  )}
+                  <Typography variant="body2" color="textSecondary">{userData?.email}</Typography>
+                </Box>
+              </Stack>
+
+              <Divider sx={{ my: 3 }} />
+
+              <Typography variant="body1" fontWeight="bold">Bio</Typography>
               {editMode ? (
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
+                <TextField fullWidth value={bio} onChange={(e) => setBio(e.target.value)} />
               ) : (
-                <Typography variant="h5">{username || user.email}</Typography>
+                <Typography variant="body2" color="textSecondary">{bio || "No bio added."}</Typography>
               )}
-              <Typography variant="body2" color="textSecondary">{userData?.email}</Typography>
-            </Box>
-          </Stack>
 
-          <Divider sx={{ my: 2 }} />
+              <Divider sx={{ my: 3 }} />
 
-          {/* Bio Section */}
-          <Typography variant="body1" fontWeight="bold">Bio</Typography>
-          {editMode ? (
-            <TextField fullWidth value={bio} onChange={(e) => setBio(e.target.value)} />
-          ) : (
-            <Typography variant="body2" color="textSecondary">{bio || "No bio added."}</Typography>
-          )}
+              <Typography variant="body1" fontWeight="bold">Skills Offered</Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap">
+                {skills.map((skill, index) => (
+                  <Chip key={index} label={skill} onDelete={editMode ? () => handleRemoveSkill(index) : undefined} />
+                ))}
+                {editMode && (
+                  <TextField
+                    value={newSkill}
+                    onChange={(e) => setNewSkill(e.target.value)}
+                    onBlur={handleAddSkill}
+                    placeholder="Add skill"
+                  />
+                )}
+              </Stack>
 
-          <Divider sx={{ my: 2 }} />
+              <Divider sx={{ my: 3 }} />
 
-          {/* Skills Section */}
-          <Typography variant="body1" fontWeight="bold">Skills Offered</Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            {skills.map((skill, index) => (
-              <Chip key={index} label={skill} />
-            ))}
-            {editMode && (
-              <TextField value={newSkill} onChange={(e) => setNewSkill(e.target.value)} onBlur={handleAddSkill} placeholder="Add skill" />
-            )}
-          </Stack>
+              <Stack direction="row" spacing={2}>
+                {[{ icon: <LinkedInIcon />, value: linkedin, setValue: setLinkedin },
+                  { icon: <TwitterIcon />, value: twitter, setValue: setTwitter },
+                  { icon: <GitHubIcon />, value: github, setValue: setGithub }]
+                  .map(({ icon, value, setValue }, index) =>
+                    editMode ? (
+                      <TextField key={index} value={value} onChange={(e) => setValue(e.target.value)} />
+                    ) : (
+                      <Tooltip key={index} title={value}>
+                        <IconButton href={value} target="_blank" sx={{ color: "primary.main" }}>
+                          {icon}
+                        </IconButton>
+                      </Tooltip>
+                    )
+                )}
+              </Stack>
 
-          <Divider sx={{ my: 2 }} />
+              <Divider sx={{ my: 3 }} />
 
-          {/* Social Media Links */}
-          <Stack direction="row" spacing={2}>
-            {[{ icon: <LinkedInIcon />, value: linkedin, setValue: setLinkedin },
-              { icon: <TwitterIcon />, value: twitter, setValue: setTwitter },
-              { icon: <GitHubIcon />, value: github, setValue: setGithub }]
-              .map(({ icon, value, setValue }, index) =>
-                editMode ? (
-                  <TextField key={index} value={value} onChange={(e) => setValue(e.target.value)} />
-                ) : (
-                  <IconButton key={index} href={value} target="_blank">
-                    {icon}
-                  </IconButton>
-                )
-            )}
-          </Stack>
+              {editMode ? (
+                <Button variant="contained" fullWidth onClick={handleSaveChanges}>Save Changes</Button>
+              ) : (
+                <Button variant="outlined" fullWidth onClick={() => setEditMode(true)}>Edit Profile</Button>
+              )}
 
-          <Divider sx={{ my: 2 }} />
+              <Button variant="text" color="error" fullWidth startIcon={<LogoutIcon />} onClick={logout}>Logout</Button>
+            </CardContent>
+          </Grid>
 
-          {/* Edit & Save Buttons */}
-          {editMode ? (
-            <Button variant="contained" fullWidth onClick={handleSaveChanges}>Save Changes</Button>
-          ) : (
-            <Button variant="outlined" fullWidth onClick={() => setEditMode(true)}>Edit Profile</Button>
-          )}
-
-          {/* Logout Button */}
-          <Button variant="text" color="error" fullWidth startIcon={<LogoutIcon />} onClick={logout}>Logout</Button>
-        </CardContent>
+        </Grid>
       </Card>
-      
     </Box>
   );
 };

@@ -3,63 +3,109 @@ import { findMatches } from "../utils/matchUsers";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
 import MatchCard from "./MatchCard";
+import { Typography, Box, Grid, CircularProgress } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const MatchList = ({ currentUser }) => {
   const [matches, setMatches] = useState([]);
   const [acceptedMatches, setAcceptedMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!currentUser?.uid) {
+      console.warn("No currentUser found, skipping match fetch.");
+      return;
+    }
+
     const fetchMatches = async () => {
-      const foundMatches = await findMatches(currentUser);
-      setMatches(foundMatches);
+      setLoading(true);
+      try {
+        console.log("Fetching matches for user:", currentUser.uid);
+        const foundMatches = await findMatches(currentUser);
+        
+        // Log response before updating state
+        console.log("Raw foundMatches response:", foundMatches);
+    
+        if (!Array.isArray(foundMatches) || foundMatches.length === 0) {
+          console.warn("findMatches returned an empty array or invalid data:", foundMatches);
+        }
+    
+        setMatches(foundMatches || []); // Ensure state updates
+      } catch (error) {
+        console.error("Error fetching matches:", error);
+        setMatches([]); // Prevent crashes
+      } finally {
+        setLoading(false);
+      }
     };
+    
 
     const fetchAcceptedMatches = async () => {
-      if (!currentUser) return;
-
       try {
+        console.log("Fetching accepted matches...");
         const matchRequestsRef = collection(db, "matchRequests");
-
-        // Query accepted matches where the user is sender or receiver
         const acceptedQuery = query(
           matchRequestsRef,
           where("status", "==", "accepted"),
-          where("receiverId", "==", currentUser.uid)
+          where("participants", "array-contains", currentUser.uid)
         );
-
         const acceptedSnapshot = await getDocs(acceptedQuery);
-        setAcceptedMatches(acceptedSnapshot.docs.map(doc => doc.data()));
+        const acceptedData = acceptedSnapshot.docs.map((doc) => doc.data());
+        
+        console.log("Accepted matches:", acceptedData);
+        setAcceptedMatches(acceptedData);
       } catch (error) {
-        console.error("❌ Error fetching accepted matches:", error);
+        console.error("Error fetching accepted matches:", error);
+        setAcceptedMatches([]);
       }
     };
 
     fetchMatches();
     fetchAcceptedMatches();
-  }, [currentUser]);
+  }, [currentUser?.uid]);
+
+  console.log("Rendering MatchList - Matches:", matches);
+  console.log("Rendering MatchList - Accepted Matches:", acceptedMatches);
 
   return (
-    <div style={{ padding: "20px", color: "white" }}>
-      <h2>🔍 Potential Matches</h2>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}>
-        {matches.length > 0 ? (
-          matches.map((match, index) => <MatchCard key={index} match={match} />)
-        ) : (
-          <p>No matches found</p>
-        )}
-      </div>
+    <Box sx={{ py: 3, color: "white" }}>
+      {/* Potential Matches Section */}
+      <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ display: "flex", alignItems: "center" }}>
+        <SearchIcon sx={{ mr: 1, color: "#4ab7e0" }} /> Potential Matches
+      </Typography>
 
-      <h2>✅ Accepted Skill Swaps</h2>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}>
-        {acceptedMatches.length > 0 ? (
-          acceptedMatches.map((match, index) => (
-            <MatchCard key={index} match={match} />
-          ))
-        ) : (
-          <p>No accepted matches yet</p>
-        )}
-      </div>
-    </div>
+      {loading ? (
+        <CircularProgress color="secondary" />
+      ) : matches.length > 0 ? (
+        <Grid container spacing={2} justifyContent="center">
+          {matches.map((match, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4}>
+              <MatchCard match={match} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Typography color="gray" textAlign="center">No matches found. Try updating your skills!</Typography>
+      )}
+
+      {/* Accepted Skill Swaps Section */}
+      <Typography variant="h5" fontWeight="bold" mt={4} gutterBottom sx={{ display: "flex", alignItems: "center" }}>
+        <CheckCircleIcon sx={{ mr: 1, color: "#84ac64" }} /> Accepted Skill Swaps
+      </Typography>
+
+      {acceptedMatches.length > 0 ? (
+        <Grid container spacing={2} justifyContent="center">
+          {acceptedMatches.map((match, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4}>
+              <MatchCard match={match} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Typography color="gray" textAlign="center">No accepted matches yet. Keep connecting!</Typography>
+      )}
+    </Box>
   );
 };
 
