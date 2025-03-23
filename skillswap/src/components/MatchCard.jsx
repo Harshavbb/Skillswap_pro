@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Avatar, Typography, Box, Chip, Button, IconButton } from "@mui/material";
+import { Card, CardContent, Avatar, Typography, Box, Chip, IconButton, Button } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EmailIcon from "@mui/icons-material/Email";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -11,8 +11,6 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 
 const MatchCard = ({ match }) => {
-  console.log("MatchCard received data:", match);
-  
   const { user: currentUser } = useAuth();
   const [matchStatus, setMatchStatus] = useState("pending");
 
@@ -20,7 +18,7 @@ const MatchCard = ({ match }) => {
     return <p>Loading user details...</p>;
   }
 
-  const { user, skillOffered = [], skillNeeded = [], mutualSkills = [], reverseMatch = [], socialLinks = {} } = match;
+  const { user, mutualSkills = [], reverseMatch = [], socialLinks = {} } = match;
 
   useEffect(() => {
     if (!currentUser?.uid || !user?.uid) return;
@@ -43,32 +41,82 @@ const MatchCard = ({ match }) => {
   }, [currentUser?.uid, user?.uid]);
 
   return (
-    <Card sx={{ width: 320, borderRadius: 4, overflow: "hidden", background: "#fff", color: "#000", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}>
-      <Box sx={{ background: "#e2d64b", padding: 2, display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <Avatar src={user.profilePic || "https://via.placeholder.com/100"} alt={user.username} sx={{ width: 90, height: 90, border: "3px solid white" }} />
+    <Card
+      sx={{
+        width: 360,
+        borderRadius: 4,
+        overflow: "hidden",
+        background: "#E3FDFD", // Updated to match the palette
+        color: "#443627",
+        boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.1)",
+        transition: "transform 0.3s ease",
+        "&:hover": { transform: "scale(1.05)" },
+      }}
+    >
+      {/* Header Section */}
+      <Box
+        sx={{
+          background: "#71C9CE", // Primary color
+          padding: 2,
+          textAlign: "center",
+        }}
+      >
+        <Avatar
+          src={user.profilePic || "https://via.placeholder.com/100"}
+          alt={user.username}
+          sx={{
+            width: 100,
+            height: 100,
+            border: "3px solid #E3FDFD",
+            margin: "auto",
+          }}
+        />
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: "bold",
+            color: "#ffffff", // White text for contrast
+            mt: 1,
+          }}
+        >
+          {user.username || "Unknown User"}
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "#CBF1F5", // Light text for subtitle
+          }}
+        >
+          Skill Exchanger
+        </Typography>
       </Box>
 
-      <CardContent sx={{ textAlign: "center" }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>{user.username || "Unknown User"}</Typography>
-        <Typography variant="body2" color="text.secondary">Skill Exchanger</Typography>
-
-        {user.location && (
-          <Box display="flex" alignItems="center" justifyContent="center" mt={1}>
-            <LocationOnIcon sx={{ color: "#2d6668", fontSize: 18, mr: 0.5 }} />
-            <Typography variant="body2">{user.location}</Typography>
-          </Box>
-        )}
-
+      {/* Content Section */}
+      <CardContent sx={{ textAlign: "center", padding: 3 }}>
+        {/* Email */}
         {user.email && (
           <Box display="flex" alignItems="center" justifyContent="center" mt={1}>
-            <EmailIcon sx={{ color: "#4ab7e0", fontSize: 18, mr: 0.5 }} />
-            <Typography variant="body2">{user.email}</Typography>
+            <EmailIcon sx={{ color: "#71C9CE", fontSize: 18, mr: 0.5 }} />
+            <Typography variant="body2" color="#443627">
+              {user.email}
+            </Typography>
           </Box>
         )}
 
-        <Box display="flex" justifyContent="center" mt={1} gap={1}>
+        {/* Location */}
+        {user.location && (
+          <Box display="flex" alignItems="center" justifyContent="center" mt={1}>
+            <LocationOnIcon sx={{ color: "#71C9CE", fontSize: 18, mr: 0.5 }} />
+            <Typography variant="body2" color="#443627">
+              {user.location}
+            </Typography>
+          </Box>
+        )}
+
+        {/* Social Links */}
+        <Box display="flex" justifyContent="center" mt={2} gap={1}>
           {socialLinks.github && (
-            <IconButton component="a" href={socialLinks.github} target="_blank" sx={{ color: "#000" }}>
+            <IconButton component="a" href={socialLinks.github} target="_blank" sx={{ color: "#443627" }}>
               <GitHubIcon />
             </IconButton>
           )}
@@ -84,36 +132,62 @@ const MatchCard = ({ match }) => {
           )}
         </Box>
 
-        <Typography variant="subtitle2" mt={2} sx={{ fontWeight: "bold", color: "#000" }}>Mutual Skills:</Typography>
+        {/* Mutual Skills */}
+        <Typography variant="subtitle2" mt={3} sx={{ fontWeight: "bold", color: "#443627" }}>
+          Mutual Skills:
+        </Typography>
         <Box display="flex" justifyContent="center" flexWrap="wrap" gap={1} mt={1}>
           {mutualSkills.map((skill, index) => (
-            <Chip key={index} label={skill} sx={{ background: "#4ab7e0", color: "#fff", fontSize: "12px", fontWeight: "bold" }} />
+            <Chip
+              key={index}
+              label={skill}
+              sx={{
+                background: "#71C9CE",
+                color: "#ffffff",
+                fontSize: "12px",
+                fontWeight: "bold",
+              }}
+            />
           ))}
         </Box>
 
-        <Typography variant="subtitle2" mt={2} sx={{ fontWeight: "bold", color: "#000" }}>Skills They Need from You:</Typography>
+        {/* Skills Needed */}
+        <Typography variant="subtitle2" mt={3} sx={{ fontWeight: "bold", color: "#443627" }}>
+          Skills They Need:
+        </Typography>
         <Box display="flex" justifyContent="center" flexWrap="wrap" gap={1} mt={1}>
           {reverseMatch.map((skill, index) => (
-            <Chip key={index} label={skill} sx={{ background: "#e2d64b", color: "#000", fontSize: "12px", fontWeight: "bold" }} />
+            <Chip
+              key={index}
+              label={skill}
+              sx={{
+                background: "#CBF1F5",
+                color: "#443627",
+                fontSize: "12px",
+                fontWeight: "bold",
+              }}
+            />
           ))}
         </Box>
 
-        <Box mt={2}>
+        {/* Match Status */}
+        <Box mt={3}>
           <Chip
             label={matchStatus === "matched" ? "Matched" : "Pending"}
             sx={{
-              backgroundColor: matchStatus === "matched" ? "#84ac64" : "#c2c19f",
-              color: "#000",
+              backgroundColor: matchStatus === "matched" ? "#71C9CE" : "#A6E3E9",
+              color: "#ffffff",
               fontSize: "14px",
               fontWeight: "bold",
               padding: "6px 12px",
-              borderRadius: "16px"
+              borderRadius: "16px",
             }}
           />
         </Box>
 
+        {/* Skill Request Button */}
         {matchStatus === "pending" && (
-          <Box mt={2}>
+          <Box mt={3}>
             <SkillRequestButton receiver={user} />
           </Box>
         )}

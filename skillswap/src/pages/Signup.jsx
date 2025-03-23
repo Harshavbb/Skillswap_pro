@@ -8,6 +8,7 @@ import {
   Box,
   CircularProgress,
   Typography,
+  Card,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -106,138 +107,200 @@ const Signup = () => {
   };
 
   return (
-    <Box sx={{ width: "50%", margin: "auto", mt: 5 }}>
-      <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label, index) => (
-          <Step key={index}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#f5f5f5",
+        padding: 3,
+      }}
+    >
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: "600px",
+          padding: 4,
+          borderRadius: 5,
+          boxShadow: 6,
+          backgroundColor: "#ffffff",
+        }}
+      >
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          textAlign="center"
+          mb={3}
+          color="primary"
+        >
+          Create Your Account
+        </Typography>
 
-      {/* Form Inputs */}
-      <Box sx={{ mt: 3 }}>
-        {activeStep === 0 && (
-          <>
-            <TextField
-              label="Username *"
-              fullWidth
-              margin="normal"
-              value={formData.username}
-              onChange={(e) =>
-                setFormData({ ...formData, username: e.target.value })
-              }
-              error={!!errors.username}
-              helperText={errors.username}
-            />
-            <TextField
-              label="Email *"
-              type="email"
-              fullWidth
-              margin="normal"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              error={!!errors.email}
-              helperText={errors.email}
-            />
-            <TextField
-              label="Password *"
-              type="password"
-              fullWidth
-              margin="normal"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              error={!!errors.password}
-              helperText={errors.password}
-            />
-            <TextField
-              label="Location *"
-              fullWidth
-              margin="normal"
-              value={formData.location}
-              onChange={(e) =>
-                setFormData({ ...formData, location: e.target.value })
-              }
-              error={!!errors.location}
-              helperText={errors.location}
-            />
-          </>
-        )}
+        <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
+          {steps.map((label, index) => (
+            <Step key={index}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
-        {activeStep === 1 && (
-          <TextField
-            label="Bio"
-            multiline
-            rows={4}
-            fullWidth
-            margin="normal"
-            value={formData.bio}
-            onChange={(e) =>
-              setFormData({ ...formData, bio: e.target.value })
-            }
-          />
-        )}
+        {/* Form Inputs */}
+        <Box>
+          {activeStep === 0 && (
+            <>
+              <TextField
+                label="Username *"
+                fullWidth
+                margin="normal"
+                value={formData.username}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
+                error={!!errors.username}
+                helperText={errors.username}
+              />
+              <TextField
+                label="Email *"
+                type="email"
+                fullWidth
+                margin="normal"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                error={!!errors.email}
+                helperText={errors.email}
+              />
+              <TextField
+                label="Password *"
+                type="password"
+                fullWidth
+                margin="normal"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                error={!!errors.password}
+                helperText={errors.password}
+              />
+              <TextField
+                label="Location *"
+                fullWidth
+                margin="normal"
+                value={formData.location}
+                onChange={(e) =>
+                  setFormData({ ...formData, location: e.target.value })
+                }
+                error={!!errors.location}
+                helperText={errors.location}
+              />
+            </>
+          )}
 
-        {activeStep === 2 && (
-          <>
+          {activeStep === 1 && (
             <TextField
-              label="LinkedIn"
+              label="Bio"
+              multiline
+              rows={4}
               fullWidth
               margin="normal"
-              value={formData.linkedin}
+              value={formData.bio}
               onChange={(e) =>
-                setFormData({ ...formData, linkedin: e.target.value })
+                setFormData({ ...formData, bio: e.target.value })
               }
-              error={!!errors.linkedin}
-              helperText={errors.linkedin}
             />
-            <TextField
-              label="GitHub"
-              fullWidth
-              margin="normal"
-              value={formData.github}
-              onChange={(e) =>
-                setFormData({ ...formData, github: e.target.value })
-              }
-              error={!!errors.github}
-              helperText={errors.github}
-            />
-            <TextField
-              label="Twitter"
-              fullWidth
-              margin="normal"
-              value={formData.twitter}
-              onChange={(e) =>
-                setFormData({ ...formData, twitter: e.target.value })
-              }
-              error={!!errors.twitter}
-              helperText={errors.twitter}
-            />
-          </>
-        )}
-      </Box>
+          )}
 
-      {/* Buttons */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-        {activeStep > 0 && (
-          <Button onClick={() => setActiveStep((prev) => prev - 1)}>
-            Back
-          </Button>
-        )}
-        {activeStep < steps.length - 1 ? (
-          <Button variant="contained" onClick={handleNext}>
-            Next
-          </Button>
-        ) : (
-          <Button variant="contained" onClick={handleSignup} disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : "Finish"}
-          </Button>
-        )}
-      </Box>
+          {activeStep === 2 && (
+            <>
+              <TextField
+                label="LinkedIn"
+                fullWidth
+                margin="normal"
+                value={formData.linkedin}
+                onChange={(e) =>
+                  setFormData({ ...formData, linkedin: e.target.value })
+                }
+                error={!!errors.linkedin}
+                helperText={errors.linkedin}
+              />
+              <TextField
+                label="GitHub"
+                fullWidth
+                margin="normal"
+                value={formData.github}
+                onChange={(e) =>
+                  setFormData({ ...formData, github: e.target.value })
+                }
+                error={!!errors.github}
+                helperText={errors.github}
+              />
+              <TextField
+                label="Twitter"
+                fullWidth
+                margin="normal"
+                value={formData.twitter}
+                onChange={(e) =>
+                  setFormData({ ...formData, twitter: e.target.value })
+                }
+                error={!!errors.twitter}
+                helperText={errors.twitter}
+              />
+            </>
+          )}
+        </Box>
+
+        {/* Buttons */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+          {activeStep > 0 && (
+            <Button
+              onClick={() => setActiveStep((prev) => prev - 1)}
+              variant="outlined"
+              sx={{
+                borderRadius: 3,
+                padding: "8px 16px",
+              }}
+            >
+              Back
+            </Button>
+          )}
+          {activeStep < steps.length - 1 ? (
+            <Button
+              variant="contained"
+              onClick={handleNext}
+              sx={{
+                background: "linear-gradient(90deg, #ff8a00, #e52e71)",
+                color: "white",
+                borderRadius: 3,
+                padding: "8px 16px",
+                "&:hover": {
+                  background: "linear-gradient(90deg, #e52e71, #ff8a00)",
+                },
+              }}
+            >
+              Next
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              onClick={handleSignup}
+              disabled={loading}
+              sx={{
+                background: "linear-gradient(90deg, #ff8a00, #e52e71)",
+                color: "white",
+                borderRadius: 3,
+                padding: "8px 16px",
+                "&:hover": {
+                  background: "linear-gradient(90deg, #e52e71, #ff8a00)",
+                },
+              }}
+            >
+              {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Finish"}
+            </Button>
+          )}
+        </Box>
+      </Card>
     </Box>
   );
 };

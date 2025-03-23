@@ -11,6 +11,7 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material";
+import loginImage from "../assets/login_illustration.png"; // Add a relevant image
 
 const Login = () => {
   const { login } = useAuth();
@@ -49,47 +50,49 @@ const Login = () => {
 
   return (
     <Container
-      maxWidth="xs"
+      maxWidth="sm"
       sx={{
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#f5f5f5",
+        padding: 3,
       }}
     >
       <Card
         sx={{
+          display: "flex",
+          flexDirection: "column",
           width: "100%",
-          p: 4,
-          bgcolor: "#0d1117",
-          color: "#ffffff",
-          border: "1px solid #30363d",
-          boxShadow: "none",
+          boxShadow: 6,
+          borderRadius: 5,
+          overflow: "hidden",
+          padding: 4,
+          bgcolor: "#ffffff",
         }}
       >
-        <Typography variant="h5" fontWeight="bold" textAlign="center" mb={2}>
-          Sign in to SkillSwap
-        </Typography>
-
-        <Typography
-          variant="body2"
-          textAlign="center"
-          sx={{ color: "#8b949e", mb: 3 }}
+        <Box
+          sx={{
+            textAlign: "center",
+            marginBottom: 3,
+          }}
         >
-          Exchange skills, grow together.
-        </Typography>
+          <img
+            src={loginImage}
+            alt="Login Illustration"
+            style={{ width: "150px", marginBottom: "16px" }}
+          />
+          <Typography variant="h5" fontWeight="bold" mb={1}>
+            Welcome Back!
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Sign in to continue your journey with SkillSwap.
+          </Typography>
+        </Box>
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2, bgcolor: "#ff7b72", color: "#0d1117" }}>
-            {error}
-          </Alert>
-        )}
-
-        {message && (
-          <Alert severity="success" sx={{ mb: 2, bgcolor: "#238636", color: "#ffffff" }}>
-            {message}
-          </Alert>
-        )}
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
 
         <form onSubmit={handleSubmit}>
           <TextField
@@ -97,21 +100,10 @@ const Login = () => {
             type="email"
             fullWidth
             variant="outlined"
-            InputLabelProps={{ style: { color: "#8b949e" } }}
-            InputProps={{
-              style: { background: "#161b22", color: "#ffffff" },
-            }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            sx={{
-              mb: 2,
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#30363d" },
-                "&:hover fieldset": { borderColor: "#58a6ff" },
-                "&.Mui-focused fieldset": { borderColor: "#58a6ff" },
-              },
-            }}
+            sx={{ mb: 2, borderRadius: 2 }}
           />
 
           <TextField
@@ -119,21 +111,10 @@ const Login = () => {
             type="password"
             fullWidth
             variant="outlined"
-            InputLabelProps={{ style: { color: "#8b949e" } }}
-            InputProps={{
-              style: { background: "#161b22", color: "#ffffff" },
-            }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            sx={{
-              mb: 3,
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#30363d" },
-                "&:hover fieldset": { borderColor: "#58a6ff" },
-                "&.Mui-focused fieldset": { borderColor: "#58a6ff" },
-              },
-            }}
+            sx={{ mb: 3, borderRadius: 2 }}
           />
 
           <Button
@@ -142,19 +123,23 @@ const Login = () => {
             variant="contained"
             disabled={loading}
             sx={{
-              bgcolor: "#238636",
               py: 1.5,
               fontWeight: "bold",
-              "&:hover": { bgcolor: "#2ea043" },
-              "&:active": { transform: "scale(0.98)" },
+              background: "linear-gradient(90deg, #ff8a00, #e52e71)",
+              color: "white",
+              borderRadius: 3,
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+              "&:hover": {
+                background: "linear-gradient(90deg, #e52e71, #ff8a00)",
+              },
             }}
           >
             {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Sign In"}
           </Button>
 
-          <Typography variant="body2" textAlign="center" sx={{ mt: 2 }}>
+          <Typography variant="body2" textAlign="center" sx={{ mt: 3 }}>
             Don't have an account?{" "}
-            <Link to="/signup" style={{ color: "#58a6ff", textDecoration: "none" }}>
+            <Link to="/signup" style={{ color: "#e52e71", textDecoration: "none", fontWeight: "bold" }}>
               Sign Up
             </Link>
           </Typography>

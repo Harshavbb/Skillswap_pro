@@ -3,39 +3,37 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
-  Button,
-  Menu,
-  MenuItem,
   Drawer,
   List,
   ListItem,
   ListItemText,
+  Box,
+  Divider,
 } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import PeopleIcon from "@mui/icons-material/People";
+import ArticleIcon from "@mui/icons-material/Article";
+import MailIcon from "@mui/icons-material/Mail";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../config/firebase"; // Firebase config
+import { auth } from "../config/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("Auth State Changed:", currentUser);
       setUser(currentUser);
     });
 
     return () => unsubscribe();
   }, []);
 
-  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   const handleLogout = async () => {
@@ -46,17 +44,17 @@ const Navbar = () => {
 
   return (
     <>
+      {/* AppBar */}
       <AppBar
         position="sticky"
         sx={{
-          backgroundColor: "#ffffff",
-          color: "#333",
-          boxShadow: "none",
-          //borderBottom: "1px solid #ddd",
-          padding: "8px 16px",
+          backgroundColor: "#ffffff", // Flat white background
+          color: "#443627", // Dark brown text/icons
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Subtle shadow
         }}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
+          {/* Mobile Menu Icon */}
           <IconButton
             edge="start"
             color="inherit"
@@ -67,62 +65,76 @@ const Navbar = () => {
             <MenuIcon />
           </IconButton>
 
-          <Typography
-            variant="h6"
-            fontWeight="bold"
-            sx={{ flexGrow: 1, cursor: "pointer", color: "#000" }}
+          {/* Logo */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
             onClick={() => navigate("/")}
           >
-            SkillSwap
-          </Typography>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              sx={{
+                color: "#443627", // Dark brown for contrast
+              }}
+            >
+              SkillSwap
+            </Typography>
+          </Box>
 
-          {user ? (
-            <>
-              <Button sx={navButtonStyle} onClick={() => navigate("/")}>Home</Button>
-              <Button sx={navButtonStyle} onClick={() => navigate("/matchmaking")}>Matchmaking</Button>
-              <Button sx={navButtonStyle} onClick={() => navigate("/blog")}>Blog</Button>
-              <Button
-                sx={{
-                  backgroundColor: "#f7e154",
-                  color: "#111111", // Ensure readable text
-                  "&:hover": {
-                    backgroundColor: "#e0c217", // Slightly darker yellow for hover effect
-                  },
-                }}
+          {/* Desktop Navigation */}
+          <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 3 }}>
+            <IconButton
+              color="inherit"
+              onClick={() => navigate("/")}
+              sx={{
+                "&:hover": { backgroundColor: "rgba(68, 54, 39, 0.1)" }, // Subtle hover effect
+              }}
+            >
+              <HomeIcon />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => navigate("/matchmaking")}
+              sx={{
+                "&:hover": { backgroundColor: "rgba(68, 54, 39, 0.1)" },
+              }}
+            >
+              <PeopleIcon />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => navigate("/blog")}
+              sx={{
+                "&:hover": { backgroundColor: "rgba(68, 54, 39, 0.1)" },
+              }}
+            >
+              <ArticleIcon />
+            </IconButton>
+            {user && (
+              <IconButton
+                color="inherit"
                 onClick={() => navigate("/match-requests")}
-              >
-                Match Requests
-              </Button>
-
-
-              <IconButton color="inherit" onClick={handleMenuOpen}>
-                <AccountCircleIcon sx={{ fontSize: 26, color: "#000" }} />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
                 sx={{
-                  "& .MuiPaper-root": {
-                    backgroundColor: "#ffffff",
-                    color: "#333",
-                    border: "1px solid #ddd",
-                  },
+                  "&:hover": { backgroundColor: "rgba(68, 54, 39, 0.1)" },
                 }}
               >
-                <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </>
-          ) : (
-            <>
-              <Button sx={navButtonStyle} onClick={() => navigate("/")}>Home</Button>
-              <Button sx={navButtonStyle} onClick={() => navigate("/login")}>Sign In</Button>
-              <Button variant="outlined" sx={outlinedButtonStyle} onClick={() => navigate("/signup")}>
-                Sign Up
-              </Button>
-            </>
-          )}
+                <MailIcon />
+              </IconButton>
+            )}
+            <IconButton
+              color="inherit"
+              onClick={() => navigate("/dashboard")}
+              sx={{
+                "&:hover": { backgroundColor: "rgba(68, 54, 39, 0.1)" },
+              }}
+            >
+              <AccountCircleIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -133,75 +145,47 @@ const Navbar = () => {
         onClose={handleDrawerToggle}
         sx={{
           "& .MuiDrawer-paper": {
-            backgroundColor: "#ffffff",
-            color: "#333",
-            borderRight: "1px solid #ddd",
+            backgroundColor: "#ffffff", // Flat white background
+            color: "#443627", // Dark brown text/icons
+            width: 250,
           },
         }}
       >
-        <List sx={{ width: 250 }}>
+        <List>
+          <ListItem button onClick={() => navigate("/")}>
+            <HomeIcon sx={{ marginRight: 1 }} />
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem button onClick={() => navigate("/matchmaking")}>
+            <PeopleIcon sx={{ marginRight: 1 }} />
+            <ListItemText primary="Matchmaking" />
+          </ListItem>
+          <ListItem button onClick={() => navigate("/blog")}>
+            <ArticleIcon sx={{ marginRight: 1 }} />
+            <ListItemText primary="Blog" />
+          </ListItem>
+          {user && (
+            <ListItem button onClick={() => navigate("/match-requests")}>
+              <MailIcon sx={{ marginRight: 1 }} />
+              <ListItemText primary="Match Requests" />
+            </ListItem>
+          )}
+          <Divider />
           {user ? (
-            <>
-              <ListItem button onClick={() => navigate("/")}>
-                <ListItemText primary="Home" />
-              </ListItem>
-              <ListItem button onClick={() => navigate("/blog")}>
-                <ListItemText primary="Blog" />
-              </ListItem>
-              <ListItem button onClick={() => navigate("/dashboard")}>
-                <ListItemText primary="Dashboard" />
-              </ListItem>
-              <ListItem button onClick={handleLogout}>
-                <ListItemText primary="Logout" />
-              </ListItem>
-            </>
+            <ListItem button onClick={handleLogout}>
+              <AccountCircleIcon sx={{ marginRight: 1 }} />
+              <ListItemText primary="Logout" />
+            </ListItem>
           ) : (
-            <>
-              <ListItem button onClick={() => navigate("/")}>
-                <ListItemText primary="Home" />
-              </ListItem>
-              <ListItem button onClick={() => navigate("/login")}>
-                <ListItemText primary="Sign In" />
-              </ListItem>
-              <ListItem button onClick={() => navigate("/signup")}>
-                <ListItemText primary="Sign Up" />
-              </ListItem>
-            </>
+            <ListItem button onClick={() => navigate("/login")}>
+              <AccountCircleIcon sx={{ marginRight: 1 }} />
+              <ListItemText primary="Sign In" />
+            </ListItem>
           )}
         </List>
       </Drawer>
     </>
   );
-};
-
-// **Button Styles**
-const navButtonStyle = {
-  fontSize: "1rem",
-  fontWeight: "500",
-  color: "#333",
-  textTransform: "none",
-  px: 2,
-  "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.05)" },
-};
-
-const primaryButtonStyle = {
-  backgroundColor: "#4dabf7",
-  color: "#fff",
-  textTransform: "none",
-  "&:hover": { backgroundColor: "#1e88e5" },
-};
-
-const outlinedButtonStyle = {
-  color: "#333",
-  borderColor: "#333",
-  fontSize: "1rem",
-  fontWeight: "500",
-  textTransform: "none",
-  px: 2,
-  "&:hover": {
-    backgroundColor: "rgba(0, 0, 0, 0.05)",
-    borderColor: "#333",
-  },
 };
 
 export default Navbar;

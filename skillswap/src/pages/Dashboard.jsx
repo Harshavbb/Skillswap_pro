@@ -100,15 +100,27 @@ const Dashboard = () => {
 
   return (
     <Box display="flex" justifyContent="center" mt={4}>
-      <Card sx={{ width: 750, p: 4, boxShadow: 3, borderRadius: 3 }}>
-        <Grid container spacing={3} alignItems="center">
-          
-          {/* Left Side Static Image */}
+      <Card
+        sx={{
+          width: 800,
+          p: 4,
+          boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.1)",
+          borderRadius: 4,
+          backgroundColor: "#E3FDFD",
+        }}
+      >
+        <Grid container spacing={4} alignItems="center">
+          {/* Left Side - Profile Image */}
           <Grid item xs={12} sm={4} display="flex" justifyContent="center">
             <img
-              src={profileImage} // Change this to your image path
+              src={profileImage}
               alt="Dashboard Illustration"
-              style={{ width: "100%", maxWidth: "200px", borderRadius: "10px" }}
+              style={{
+                width: "100%",
+                maxWidth: "200px",
+                borderRadius: "12px",
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+              }}
             />
           </Grid>
 
@@ -116,32 +128,69 @@ const Dashboard = () => {
           <Grid item xs={12} sm={8}>
             <CardContent>
               <Stack direction="row" spacing={2} alignItems="center">
-                <Avatar src={userData?.profilePic || ""} sx={{ width: 90, height: 90, boxShadow: 2 }} />
+                <Avatar
+                  src={userData?.profilePic || ""}
+                  sx={{
+                    width: 90,
+                    height: 90,
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
                 <Box>
                   {editMode ? (
-                    <TextField fullWidth variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Enter your name"
+                    />
                   ) : (
-                    <Typography variant="h5" fontWeight="bold">{username || user.email}</Typography>
+                    <Typography variant="h5" fontWeight="bold">
+                      {username || user.email}
+                    </Typography>
                   )}
-                  <Typography variant="body2" color="textSecondary">{userData?.email}</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {userData?.email}
+                  </Typography>
                 </Box>
               </Stack>
 
               <Divider sx={{ my: 3 }} />
 
-              <Typography variant="body1" fontWeight="bold">Bio</Typography>
+              <Typography variant="body1" fontWeight="bold">
+                Bio
+              </Typography>
               {editMode ? (
-                <TextField fullWidth value={bio} onChange={(e) => setBio(e.target.value)} />
+                <TextField
+                  fullWidth
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  placeholder="Write something about yourself"
+                />
               ) : (
-                <Typography variant="body2" color="textSecondary">{bio || "No bio added."}</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {bio || "No bio added."}
+                </Typography>
               )}
 
               <Divider sx={{ my: 3 }} />
 
-              <Typography variant="body1" fontWeight="bold">Skills Offered</Typography>
+              <Typography variant="body1" fontWeight="bold">
+                Skills Offered
+              </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap">
                 {skills.map((skill, index) => (
-                  <Chip key={index} label={skill} onDelete={editMode ? () => handleRemoveSkill(index) : undefined} />
+                  <Chip
+                    key={index}
+                    label={skill}
+                    onDelete={editMode ? () => handleRemoveSkill(index) : undefined}
+                    sx={{
+                      backgroundColor: "#71C9CE",
+                      color: "#ffffff",
+                      fontWeight: "bold",
+                    }}
+                  />
                 ))}
                 {editMode && (
                   <TextField
@@ -149,6 +198,8 @@ const Dashboard = () => {
                     onChange={(e) => setNewSkill(e.target.value)}
                     onBlur={handleAddSkill}
                     placeholder="Add skill"
+                    size="small"
+                    sx={{ width: "150px" }}
                   />
                 )}
               </Stack>
@@ -158,13 +209,25 @@ const Dashboard = () => {
               <Stack direction="row" spacing={2}>
                 {[{ icon: <LinkedInIcon />, value: linkedin, setValue: setLinkedin },
                   { icon: <TwitterIcon />, value: twitter, setValue: setTwitter },
-                  { icon: <GitHubIcon />, value: github, setValue: setGithub }]
-                  .map(({ icon, value, setValue }, index) =>
+                  { icon: <GitHubIcon />, value: github, setValue: setGithub }].map(
+                  ({ icon, value, setValue }, index) =>
                     editMode ? (
-                      <TextField key={index} value={value} onChange={(e) => setValue(e.target.value)} />
+                      <TextField
+                        key={index}
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        placeholder="Add link"
+                        size="small"
+                      />
                     ) : (
-                      <Tooltip key={index} title={value}>
-                        <IconButton href={value} target="_blank" sx={{ color: "primary.main" }}>
+                      <Tooltip key={index} title={value || "Not added"}>
+                        <IconButton
+                          href={value}
+                          target="_blank"
+                          sx={{
+                            color: value ? "#71C9CE" : "#ccc",
+                          }}
+                        >
                           {icon}
                         </IconButton>
                       </Tooltip>
@@ -175,15 +238,48 @@ const Dashboard = () => {
               <Divider sx={{ my: 3 }} />
 
               {editMode ? (
-                <Button variant="contained" fullWidth onClick={handleSaveChanges}>Save Changes</Button>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={handleSaveChanges}
+                  sx={{
+                    backgroundColor: "#71C9CE",
+                    color: "#ffffff",
+                    "&:hover": { backgroundColor: "#5BB3B8" },
+                  }}
+                >
+                  Save Changes
+                </Button>
               ) : (
-                <Button variant="outlined" fullWidth onClick={() => setEditMode(true)}>Edit Profile</Button>
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => setEditMode(true)}
+                  sx={{
+                    borderColor: "#71C9CE",
+                    color: "#71C9CE",
+                    "&:hover": {
+                      backgroundColor: "#71C9CE",
+                      color: "#ffffff",
+                    },
+                  }}
+                >
+                  Edit Profile
+                </Button>
               )}
 
-              <Button variant="text" color="error" fullWidth startIcon={<LogoutIcon />} onClick={logout}>Logout</Button>
+              <Button
+                variant="text"
+                color="error"
+                fullWidth
+                startIcon={<LogoutIcon />}
+                onClick={logout}
+                sx={{ mt: 2 }}
+              >
+                Logout
+              </Button>
             </CardContent>
           </Grid>
-
         </Grid>
       </Card>
     </Box>
