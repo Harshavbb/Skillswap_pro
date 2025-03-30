@@ -50,100 +50,133 @@ const Login = () => {
 
   return (
     <Container
-      maxWidth="sm"
+  maxWidth="sm"
+  sx={{
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E3FDFD", // Light teal background
+    padding: 3,
+  }}
+>
+<Card
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      width: "100%",
+      boxShadow: 6,
+      borderRadius: 5,
+      overflow: "hidden",
+      padding: 4,
+      bgcolor: "#ffffff", // White background for contrast
+    }}
+  >
+         <Box
       sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#f5f5f5",
-        padding: 3,
+        textAlign: "center",
+        marginBottom: 3,
       }}
     >
-      <Card
+           <img
+        src={loginImage}
+        alt="Login Illustration"
+        style={{ width: "150px", marginBottom: "16px" }}
+      />
+      <Typography variant="h5" fontWeight="bold" mb={1} sx={{ color: "#443627" }}>
+        Welcome Back!
+      </Typography>
+      <Typography variant="body2" sx={{ color: "#5C4A38" }}>
+        Sign in to continue your journey with SkillSwap.
+      </Typography>
+    </Box>
+
+    {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+    {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
+    <form onSubmit={handleSubmit}>
+      <TextField
+        label="Email"
+        type="email"
+        fullWidth
+        variant="outlined"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          boxShadow: 6,
-          borderRadius: 5,
-          overflow: "hidden",
-          padding: 4,
-          bgcolor: "#ffffff",
+          mb: 2,
+          borderRadius: 2,
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "#00796B", // Teal border
+            },
+            "&:hover fieldset": {
+              borderColor: "#004D40", // Darker teal on hover
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#004D40", // Darker teal when focused
+            },
+          },
+        }}
+      />
+         <TextField
+        label="Password"
+        type="password"
+        fullWidth
+        variant="outlined"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        sx={{
+          mb: 3,
+          borderRadius: 2,
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "#00796B", // Teal border
+            },
+            "&:hover fieldset": {
+              borderColor: "#004D40", // Darker teal on hover
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#004D40", // Darker teal when focused
+            },
+          },
+        }}
+      />
+
+<Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        disabled={loading}
+        sx={{
+          py: 1.5,
+          fontWeight: "bold",
+          backgroundColor: "#00796B", // Teal background
+          color: "white",
+          borderRadius: 3,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+          "&:hover": {
+            backgroundColor: "#004D40", // Darker teal on hover
+          },
         }}
       >
-        <Box
-          sx={{
-            textAlign: "center",
-            marginBottom: 3,
+        {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Sign In"}
+      </Button>
+
+      <Typography variant="body2" textAlign="center" sx={{ mt: 3, color: "#443627" }}>
+        Don't have an account?{" "}
+        <Link
+          to="/signup"
+          style={{
+            color: "#00796B", // Teal link color
+            textDecoration: "none",
+            fontWeight: "bold",
           }}
         >
-          <img
-            src={loginImage}
-            alt="Login Illustration"
-            style={{ width: "150px", marginBottom: "16px" }}
-          />
-          <Typography variant="h5" fontWeight="bold" mb={1}>
-            Welcome Back!
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Sign in to continue your journey with SkillSwap.
-          </Typography>
-        </Box>
-
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
-
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Email"
-            type="email"
-            fullWidth
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            sx={{ mb: 2, borderRadius: 2 }}
-          />
-
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            sx={{ mb: 3, borderRadius: 2 }}
-          />
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            disabled={loading}
-            sx={{
-              py: 1.5,
-              fontWeight: "bold",
-              background: "linear-gradient(90deg, #ff8a00, #e52e71)",
-              color: "white",
-              borderRadius: 3,
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-              "&:hover": {
-                background: "linear-gradient(90deg, #e52e71, #ff8a00)",
-              },
-            }}
-          >
-            {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Sign In"}
-          </Button>
-
-          <Typography variant="body2" textAlign="center" sx={{ mt: 3 }}>
-            Don't have an account?{" "}
-            <Link to="/signup" style={{ color: "#e52e71", textDecoration: "none", fontWeight: "bold" }}>
-              Sign Up
-            </Link>
-          </Typography>
-        </form>
+          Sign Up
+        </Link>
+      </Typography>
+    </form>
       </Card>
     </Container>
   );

@@ -83,40 +83,40 @@ const LandingPage = () => {
 
           {/* Buttons */}
           <Box sx={{ display: "flex", gap: 2 }}>
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#71C9CE", // Primary color
+                    <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#00796B", // Darker teal for better contrast
+              color: "#ffffff",
+              px: 4,
+              py: 1.5,
+              fontSize: "1rem",
+              fontWeight: "bold",
+              borderRadius: "8px",
+              "&:hover": { backgroundColor: "#004D40" }, // Even darker teal on hover
+            }}
+          >
+            Get Started
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{
+              borderColor: "#00796B", // Darker teal for better contrast
+              color: "#00796B",
+              px: 4,
+              py: 1.5,
+              fontSize: "1rem",
+              fontWeight: "bold",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "#00796B",
                 color: "#ffffff",
-                px: 4,
-                py: 1.5,
-                fontSize: "1rem",
-                fontWeight: "bold",
-                borderRadius: "8px",
-                "&:hover": { backgroundColor: "#5BB3B8" }, // Slightly darker teal
-              }}
-            >
-              Get Started
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "#71C9CE", // Primary color
-                color: "#71C9CE",
-                px: 4,
-                py: 1.5,
-                fontSize: "1rem",
-                fontWeight: "bold",
-                borderRadius: "8px",
-                "&:hover": {
-                  backgroundColor: "#71C9CE",
-                  color: "#ffffff",
-                  borderColor: "#71C9CE",
-                },
-              }}
-            >
-              Learn More
-            </Button>
+                borderColor: "#00796B",
+              },
+            }}
+          >
+            Learn More
+          </Button>
           </Box>
         </Grid>
       </Grid>
@@ -130,7 +130,7 @@ const LandingPage = () => {
           display: "flex",
           justifyContent: "center",
           borderRadius: "12px",
-          boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.1)",
+          //boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.1)",
           mt: 6,
         }}
       >
@@ -228,12 +228,12 @@ const LandingPage = () => {
         >
           &copy; {new Date().getFullYear()} SkillSwap - All Rights Reserved
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: "16px" }}>
-          <Facebook sx={{ color: "#71C9CE", cursor: "pointer", fontSize: 28 }} />
-          <XIcon sx={{ color: "#71C9CE", cursor: "pointer", fontSize: 28 }} />
-          <Instagram sx={{ color: "#71C9CE", cursor: "pointer", fontSize: 28 }} />
-        </Box>
+              <Box sx={{ display: "flex", justifyContent: "center", gap: "16px" }}>
+        <Facebook sx={{ color: "#004D40", cursor: "pointer", fontSize: 28 }} /> {/* Dark green */}
+        <XIcon sx={{ color: "#004D40", cursor: "pointer", fontSize: 28 }} />
+        <Instagram sx={{ color: "#004D40", cursor: "pointer", fontSize: 28 }} />
       </Box>
+      </Box>  
     </Container>
   );
 };

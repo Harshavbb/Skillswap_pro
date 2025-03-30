@@ -99,167 +99,167 @@ const Dashboard = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" mt={4}>
-      <Card
-        sx={{
-          width: 800,
-          p: 4,
-          boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.1)",
-          borderRadius: 4,
-          backgroundColor: "#E3FDFD",
-        }}
-      >
+      <Box display="flex" justifyContent="center" mt={4}>
+    <Card
+      sx={{
+        width: 800,
+        p: 4,
+        boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.2)", // Slightly darker shadow for better contrast
+        borderRadius: 4,
+        backgroundColor: "#ffffff", // White background for better contrast
+      }}
+  >
         <Grid container spacing={4} alignItems="center">
-          {/* Left Side - Profile Image */}
-          <Grid item xs={12} sm={4} display="flex" justifyContent="center">
-            <img
-              src={profileImage}
-              alt="Dashboard Illustration"
-              style={{
-                width: "100%",
-                maxWidth: "200px",
-                borderRadius: "12px",
-                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-              }}
-            />
-          </Grid>
+      {/* Left Side - Profile Image */}
+      <Grid item xs={12} sm={4} display="flex" justifyContent="center">
+        <img
+          src={profileImage}
+          alt="Dashboard Illustration"
+          style={{
+            width: "100%",
+            maxWidth: "200px",
+            borderRadius: "12px",
+            //boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)", // Darker shadow for better visibility
+          }}
+        />
+      </Grid>
 
           {/* Right Side - Profile Section */}
           <Grid item xs={12} sm={8}>
-            <CardContent>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Avatar
-                  src={userData?.profilePic || ""}
-                  sx={{
-                    width: 90,
-                    height: 90,
-                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                  }}
-                />
-                <Box>
-                  {editMode ? (
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Enter your name"
-                    />
-                  ) : (
-                    <Typography variant="h5" fontWeight="bold">
-                      {username || user.email}
-                    </Typography>
-                  )}
-                  <Typography variant="body2" color="textSecondary">
-                    {userData?.email}
-                  </Typography>
-                </Box>
-              </Stack>
-
-              <Divider sx={{ my: 3 }} />
-
-              <Typography variant="body1" fontWeight="bold">
-                Bio
-              </Typography>
-              {editMode ? (
+        <CardContent>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Avatar
+              src={userData?.profilePic || ""}
+              sx={{
+                width: 90,
+                height: 90,
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)", // Darker shadow for better visibility
+              }}
+            />
+            <Box>
+            {editMode ? (
                 <TextField
                   fullWidth
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  placeholder="Write something about yourself"
+                  variant="outlined"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your name"
                 />
               ) : (
-                <Typography variant="body2" color="textSecondary">
-                  {bio || "No bio added."}
+                <Typography variant="h5" fontWeight="bold" sx={{ color: "#333333" }}>
+                  {username || user.email}
                 </Typography>
               )}
-
-              <Divider sx={{ my: 3 }} />
-
-              <Typography variant="body1" fontWeight="bold">
-                Skills Offered
+              <Typography variant="body2" sx={{ color: "#555555" }}>
+                {userData?.email}
               </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap">
-                {skills.map((skill, index) => (
-                  <Chip
-                    key={index}
-                    label={skill}
-                    onDelete={editMode ? () => handleRemoveSkill(index) : undefined}
+            </Box>
+          </Stack>
+
+          <Divider sx={{ my: 3, borderColor: "#cccccc" }} />
+
+        <Typography variant="body1" fontWeight="bold" sx={{ color: "#333333" }}>
+          Bio
+        </Typography>
+        {editMode ? (
+          <TextField
+            fullWidth
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            placeholder="Write something about yourself"
+          />
+        ) : (
+          <Typography variant="body2" sx={{ color: "#555555" }}>
+            {bio || "No bio added."}
+          </Typography>
+        )}
+
+        <Divider sx={{ my: 3, borderColor: "#cccccc" }} />
+
+        <Typography variant="body1" fontWeight="bold" sx={{ color: "#333333" }}>
+          Skills Offered
+        </Typography>
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          {skills.map((skill, index) => (
+            <Chip
+              key={index}
+              label={skill}
+              onDelete={editMode ? () => handleRemoveSkill(index) : undefined}
+              sx={{
+                backgroundColor: "#00796B", // Darker teal for better contrast
+                color: "#ffffff",
+                fontWeight: "bold",
+              }}
+            />
+          ))}
+               {editMode && (
+              <TextField
+                value={newSkill}
+                onChange={(e) => setNewSkill(e.target.value)}
+                onBlur={handleAddSkill}
+                placeholder="Add skill"
+                size="small"
+                sx={{ width: "150px" }}
+              />
+            )}
+          </Stack>
+
+          <Divider sx={{ my: 3, borderColor: "#cccccc" }} />
+          <Stack direction="row" spacing={2}>
+            {[
+              { icon: <LinkedInIcon />, value: linkedin, setValue: setLinkedin },
+              { icon: <TwitterIcon />, value: twitter, setValue: setTwitter },
+              { icon: <GitHubIcon />, value: github, setValue: setGithub },
+            ].map(({ icon, value, setValue }, index) =>
+              editMode ? (
+                <TextField
+                  key={index}
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  placeholder="Add link"
+                  size="small"
+                />
+              ) : (
+                <Tooltip key={index} title={value || "Not added"}>
+                  <IconButton
+                    href={value}
+                    target="_blank"
                     sx={{
-                      backgroundColor: "#71C9CE",
-                      color: "#ffffff",
-                      fontWeight: "bold",
+                      color: value ? "#00796B" : "#cccccc", // Darker teal for added links, gray for missing links
                     }}
-                  />
-                ))}
-                {editMode && (
-                  <TextField
-                    value={newSkill}
-                    onChange={(e) => setNewSkill(e.target.value)}
-                    onBlur={handleAddSkill}
-                    placeholder="Add skill"
-                    size="small"
-                    sx={{ width: "150px" }}
-                  />
-                )}
-              </Stack>
+                  >
+                    {icon}
+                  </IconButton>
+                </Tooltip>
+              )
+            )}
+          </Stack>
 
-              <Divider sx={{ my: 3 }} />
 
-              <Stack direction="row" spacing={2}>
-                {[{ icon: <LinkedInIcon />, value: linkedin, setValue: setLinkedin },
-                  { icon: <TwitterIcon />, value: twitter, setValue: setTwitter },
-                  { icon: <GitHubIcon />, value: github, setValue: setGithub }].map(
-                  ({ icon, value, setValue }, index) =>
-                    editMode ? (
-                      <TextField
-                        key={index}
-                        value={value}
-                        onChange={(e) => setValue(e.target.value)}
-                        placeholder="Add link"
-                        size="small"
-                      />
-                    ) : (
-                      <Tooltip key={index} title={value || "Not added"}>
-                        <IconButton
-                          href={value}
-                          target="_blank"
-                          sx={{
-                            color: value ? "#71C9CE" : "#ccc",
-                          }}
-                        >
-                          {icon}
-                        </IconButton>
-                      </Tooltip>
-                    )
-                )}
-              </Stack>
-
-              <Divider sx={{ my: 3 }} />
-
-              {editMode ? (
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={handleSaveChanges}
-                  sx={{
-                    backgroundColor: "#71C9CE",
-                    color: "#ffffff",
-                    "&:hover": { backgroundColor: "#5BB3B8" },
-                  }}
-                >
-                  Save Changes
-                </Button>
+          <Divider sx={{ my: 3, borderColor: "#cccccc" }} />
+          {editMode ? (
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleSaveChanges}
+              sx={{
+                backgroundColor: "#00796B", // Darker teal for better contrast
+                color: "#ffffff",
+                "&:hover": { backgroundColor: "#005A4F" }, // Even darker teal on hover
+              }}
+            >
+              Save Changes
+            </Button>
               ) : (
                 <Button
                   variant="outlined"
                   fullWidth
                   onClick={() => setEditMode(true)}
                   sx={{
-                    borderColor: "#71C9CE",
-                    color: "#71C9CE",
+                    borderColor: "#00796B", // Darker teal for better contrast
+                    color: "#00796B",
                     "&:hover": {
-                      backgroundColor: "#71C9CE",
+                      backgroundColor: "#00796B",
                       color: "#ffffff",
                     },
                   }}
@@ -267,22 +267,21 @@ const Dashboard = () => {
                   Edit Profile
                 </Button>
               )}
-
               <Button
-                variant="text"
-                color="error"
-                fullWidth
-                startIcon={<LogoutIcon />}
-                onClick={logout}
-                sx={{ mt: 2 }}
-              >
-                Logout
-              </Button>
-            </CardContent>
-          </Grid>
-        </Grid>
-      </Card>
-    </Box>
+            variant="text"
+            color="error"
+            fullWidth
+            startIcon={<LogoutIcon />}
+            onClick={logout}
+            sx={{ mt: 2 }}
+          >
+            Logout
+          </Button>
+        </CardContent>
+      </Grid>
+    </Grid>
+  </Card>
+</Box>  
   );
 };
 

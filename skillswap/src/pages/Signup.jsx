@@ -113,7 +113,7 @@ const Signup = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#E3FDFD", // Light teal background
         padding: 3,
       }}
     >
@@ -124,7 +124,7 @@ const Signup = () => {
           padding: 4,
           borderRadius: 5,
           boxShadow: 6,
-          backgroundColor: "#ffffff",
+          backgroundColor: "#ffffff", // White background for contrast
         }}
       >
         <Typography
@@ -132,7 +132,7 @@ const Signup = () => {
           fontWeight="bold"
           textAlign="center"
           mb={3}
-          color="primary"
+          sx={{ color: "#443627" }} // Dark brown text
         >
           Create Your Account
         </Typography>
@@ -159,6 +159,19 @@ const Signup = () => {
                 }
                 error={!!errors.username}
                 helperText={errors.username}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00796B", // Teal border
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#004D40", // Darker teal on hover
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#004D40", // Darker teal when focused
+                    },
+                  },
+                }}
               />
               <TextField
                 label="Email *"
@@ -171,6 +184,19 @@ const Signup = () => {
                 }
                 error={!!errors.email}
                 helperText={errors.email}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00796B",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#004D40",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#004D40",
+                    },
+                  },
+                }}
               />
               <TextField
                 label="Password *"
@@ -183,6 +209,19 @@ const Signup = () => {
                 }
                 error={!!errors.password}
                 helperText={errors.password}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00796B",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#004D40",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#004D40",
+                    },
+                  },
+                }}
               />
               <TextField
                 label="Location *"
@@ -194,6 +233,19 @@ const Signup = () => {
                 }
                 error={!!errors.location}
                 helperText={errors.location}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00796B",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#004D40",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#004D40",
+                    },
+                  },
+                }}
               />
             </>
           )}
@@ -209,6 +261,19 @@ const Signup = () => {
               onChange={(e) =>
                 setFormData({ ...formData, bio: e.target.value })
               }
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#00796B",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#004D40",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#004D40",
+                  },
+                },
+              }}
             />
           )}
 
@@ -224,6 +289,19 @@ const Signup = () => {
                 }
                 error={!!errors.linkedin}
                 helperText={errors.linkedin}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00796B",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#004D40",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#004D40",
+                    },
+                  },
+                }}
               />
               <TextField
                 label="GitHub"
@@ -235,6 +313,19 @@ const Signup = () => {
                 }
                 error={!!errors.github}
                 helperText={errors.github}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00796B",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#004D40",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#004D40",
+                    },
+                  },
+                }}
               />
               <TextField
                 label="Twitter"
@@ -246,6 +337,19 @@ const Signup = () => {
                 }
                 error={!!errors.twitter}
                 helperText={errors.twitter}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#00796B",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#004D40",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#004D40",
+                    },
+                  },
+                }}
               />
             </>
           )}
@@ -258,8 +362,14 @@ const Signup = () => {
               onClick={() => setActiveStep((prev) => prev - 1)}
               variant="outlined"
               sx={{
+                borderColor: "#00796B", // Teal border
+                color: "#00796B",
                 borderRadius: 3,
                 padding: "8px 16px",
+                "&:hover": {
+                  backgroundColor: "#00796B",
+                  color: "#ffffff",
+                },
               }}
             >
               Back
@@ -270,12 +380,12 @@ const Signup = () => {
               variant="contained"
               onClick={handleNext}
               sx={{
-                background: "linear-gradient(90deg, #ff8a00, #e52e71)",
+                backgroundColor: "#00796B", // Teal background
                 color: "white",
                 borderRadius: 3,
                 padding: "8px 16px",
                 "&:hover": {
-                  background: "linear-gradient(90deg, #e52e71, #ff8a00)",
+                  backgroundColor: "#004D40", // Darker teal on hover
                 },
               }}
             >
@@ -287,12 +397,12 @@ const Signup = () => {
               onClick={handleSignup}
               disabled={loading}
               sx={{
-                background: "linear-gradient(90deg, #ff8a00, #e52e71)",
+                backgroundColor: "#00796B",
                 color: "white",
                 borderRadius: 3,
                 padding: "8px 16px",
                 "&:hover": {
-                  background: "linear-gradient(90deg, #e52e71, #ff8a00)",
+                  backgroundColor: "#004D40",
                 },
               }}
             >
