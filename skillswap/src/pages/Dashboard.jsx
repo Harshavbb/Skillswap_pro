@@ -17,6 +17,7 @@ import {
   Tooltip,
   Divider,
   Grid,
+  Container
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -99,189 +100,218 @@ const Dashboard = () => {
   };
 
   return (
-      <Box display="flex" justifyContent="center" mt={4}>
-    <Card
-      sx={{
-        width: 800,
-        p: 4,
-        boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.2)", // Slightly darker shadow for better contrast
-        borderRadius: 4,
-        backgroundColor: "#ffffff", // White background for better contrast
-      }}
-  >
-        <Grid container spacing={4} alignItems="center">
-      {/* Left Side - Profile Image */}
-      <Grid item xs={12} sm={4} display="flex" justifyContent="center">
-        <img
-          src={profileImage}
-          alt="Dashboard Illustration"
-          style={{
-            width: "100%",
-            maxWidth: "200px",
-            borderRadius: "12px",
-            //boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)", // Darker shadow for better visibility
+    <Box sx={{ backgroundColor: "#ffffff", minHeight: "100vh", py: 8 }}>
+      <Container maxWidth="md">
+        <Card
+          elevation={0}
+          sx={{
+            borderRadius: "24px",
+            border: "3px solid #2D2D2D",
+            boxShadow: "14px 14px 0px #DCD6FF", // Large Lavender shadow
+            overflow: "hidden",
           }}
-        />
-      </Grid>
-
-          {/* Right Side - Profile Section */}
-          <Grid item xs={12} sm={8}>
-        <CardContent>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar
-              src={userData?.profilePic || ""}
-              sx={{
-                width: 90,
-                height: 90,
-                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)", // Darker shadow for better visibility
-              }}
-            />
-            <Box>
-            {editMode ? (
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your name"
-                />
-              ) : (
-                <Typography variant="h5" fontWeight="bold" sx={{ color: "#333333" }}>
-                  {username || user.email}
-                </Typography>
-              )}
-              <Typography variant="body2" sx={{ color: "#555555" }}>
-                {userData?.email}
-              </Typography>
-            </Box>
-          </Stack>
-
-          <Divider sx={{ my: 3, borderColor: "#cccccc" }} />
-
-        <Typography variant="body1" fontWeight="bold" sx={{ color: "#333333" }}>
-          Bio
-        </Typography>
-        {editMode ? (
-          <TextField
-            fullWidth
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            placeholder="Write something about yourself"
-          />
-        ) : (
-          <Typography variant="body2" sx={{ color: "#555555" }}>
-            {bio || "No bio added."}
-          </Typography>
-        )}
-
-        <Divider sx={{ my: 3, borderColor: "#cccccc" }} />
-
-        <Typography variant="body1" fontWeight="bold" sx={{ color: "#333333" }}>
-          Skills Offered
-        </Typography>
-        <Stack direction="row" spacing={1} flexWrap="wrap">
-          {skills.map((skill, index) => (
-            <Chip
-              key={index}
-              label={skill}
-              onDelete={editMode ? () => handleRemoveSkill(index) : undefined}
-              sx={{
-                backgroundColor: "#00796B", // Darker teal for better contrast
-                color: "#ffffff",
-                fontWeight: "bold",
-              }}
-            />
-          ))}
-               {editMode && (
-              <TextField
-                value={newSkill}
-                onChange={(e) => setNewSkill(e.target.value)}
-                onBlur={handleAddSkill}
-                placeholder="Add skill"
-                size="small"
-                sx={{ width: "150px" }}
-              />
-            )}
-          </Stack>
-
-          <Divider sx={{ my: 3, borderColor: "#cccccc" }} />
-          <Stack direction="row" spacing={2}>
-            {[
-              { icon: <LinkedInIcon />, value: linkedin, setValue: setLinkedin },
-              { icon: <TwitterIcon />, value: twitter, setValue: setTwitter },
-              { icon: <GitHubIcon />, value: github, setValue: setGithub },
-            ].map(({ icon, value, setValue }, index) =>
-              editMode ? (
-                <TextField
-                  key={index}
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  placeholder="Add link"
-                  size="small"
-                />
-              ) : (
-                <Tooltip key={index} title={value || "Not added"}>
-                  <IconButton
-                    href={value}
-                    target="_blank"
-                    sx={{
-                      color: value ? "#00796B" : "#cccccc", // Darker teal for added links, gray for missing links
-                    }}
-                  >
-                    {icon}
-                  </IconButton>
-                </Tooltip>
-              )
-            )}
-          </Stack>
-
-
-          <Divider sx={{ my: 3, borderColor: "#cccccc" }} />
-          {editMode ? (
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={handleSaveChanges}
-              sx={{
-                backgroundColor: "#00796B", // Darker teal for better contrast
-                color: "#ffffff",
-                "&:hover": { backgroundColor: "#005A4F" }, // Even darker teal on hover
+        >
+          <Grid container>
+            {/* Left Side - Profile Visual Block */}
+            <Grid 
+              item xs={12} sm={4} 
+              sx={{ 
+                backgroundColor: "#FFF9D6", // Lemon Accent
+                borderRight: { sm: "3px solid #2D2D2D" },
+                borderBottom: { xs: "3px solid #2D2D2D", sm: "none" },
+                p: 4, 
+                display: "flex", 
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center"
               }}
             >
-              Save Changes
-            </Button>
-              ) : (
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => setEditMode(true)}
-                  sx={{
-                    borderColor: "#00796B", // Darker teal for better contrast
-                    color: "#00796B",
-                    "&:hover": {
-                      backgroundColor: "#00796B",
-                      color: "#ffffff",
-                    },
-                  }}
-                >
-                  Edit Profile
-                </Button>
-              )}
-              <Button
-            variant="text"
-            color="error"
-            fullWidth
-            startIcon={<LogoutIcon />}
-            onClick={logout}
-            sx={{ mt: 2 }}
-          >
-            Logout
-          </Button>
-        </CardContent>
-      </Grid>
-    </Grid>
-  </Card>
-</Box>  
+              <Box
+                component="img"
+                src={profileImage}
+                alt="Profile Illustration"
+                sx={{
+                  width: "100%",
+                  maxWidth: "180px",
+                  borderRadius: "20px",
+                  border: "3px solid #2D2D2D",
+                  backgroundColor: "#fff",
+                  mb: 3
+                }}
+              />
+              <Avatar
+                src={userData?.profilePic || ""}
+                sx={{
+                  width: 80,
+                  height: 80,
+                  border: "3px solid #2D2D2D",
+                  boxShadow: "4px 4px 0px #2D2D2D",
+                }}
+              />
+            </Grid>
+
+            {/* Right Side - Content Section */}
+            <Grid item xs={12} sm={8}>
+              <CardContent sx={{ p: 4 }}>
+                <Box sx={{ mb: 4 }}>
+                  {editMode ? (
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      value={username}
+                      label="User Name"
+                      onChange={(e) => setUsername(e.target.value)}
+                      sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px", border: "2px solid #2D2D2D" } }}
+                    />
+                  ) : (
+                    <Typography variant="h4" sx={{ fontWeight: 900, color: "#2D2D2D", letterSpacing: -1 }}>
+                      {username || user.email}
+                    </Typography>
+                  )}
+                  <Typography variant="body2" sx={{ fontWeight: "bold", color: "#888", mt: 1 }}>
+                    {userData?.email}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ p: 2, backgroundColor: "#E0F9F1", border: "2px solid #2D2D2D", borderRadius: "16px", mb: 3 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 900, textTransform: "uppercase", mb: 1 }}>
+                    Bio
+                  </Typography>
+                  {editMode ? (
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={2}
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                    />
+                  ) : (
+                    <Typography variant="body2" sx={{ color: "#2D2D2D", lineHeight: 1.6 }}>
+                      {bio || "Tell us about your superpower..."}
+                    </Typography>
+                  )}
+                </Box>
+
+                <Typography variant="subtitle2" sx={{ fontWeight: 900, textTransform: "uppercase", mb: 2 }}>
+                  Skills Offered
+                </Typography>
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ gap: 1, mb: 3 }}>
+                  {skills.map((skill, index) => (
+                    <Chip
+                      key={index}
+                      label={skill}
+                      onDelete={editMode ? () => handleRemoveSkill(index) : undefined}
+                      sx={{
+                        backgroundColor: "#DCD6FF",
+                        color: "#2D2D2D",
+                        fontWeight: "bold",
+                        border: "2px solid #2D2D2D",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  ))}
+                  {editMode && (
+                    <TextField
+                      value={newSkill}
+                      onChange={(e) => setNewSkill(e.target.value)}
+                      onBlur={handleAddSkill}
+                      placeholder="+ Add Skill"
+                      size="small"
+                      sx={{ width: "130px" }}
+                    />
+                  )}
+                </Stack>
+
+                <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+                  {[
+                    { icon: <LinkedInIcon />, value: linkedin, setValue: setLinkedin, color: "#DCD6FF" },
+                    { icon: <TwitterIcon />, value: twitter, setValue: setTwitter, color: "#FFF9D6" },
+                    { icon: <GitHubIcon />, value: github, setValue: setGithub, color: "#E0F9F1" },
+                  ].map(({ icon, value, setValue, color }, index) =>
+                    editMode ? (
+                      <TextField
+                        key={index}
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        placeholder="Social Link"
+                        size="small"
+                      />
+                    ) : (
+                      <Tooltip key={index} title={value || "Not added"}>
+                        <IconButton
+                          href={value}
+                          target="_blank"
+                          sx={{
+                            backgroundColor: value ? color : "#fff",
+                            border: "2px solid #2D2D2D",
+                            borderRadius: "10px",
+                            color: "#2D2D2D",
+                            "&:hover": { backgroundColor: color }
+                          }}
+                        >
+                          {icon}
+                        </IconButton>
+                      </Tooltip>
+                    )
+                  )}
+                </Stack>
+
+                <Stack direction="row" spacing={2}>
+                  {editMode ? (
+                    <Button
+                      variant="contained"
+                      onClick={handleSaveChanges}
+                      sx={{
+                        flex: 1,
+                        backgroundColor: "#2D2D2D",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        borderRadius: "12px",
+                        border: "3px solid #2D2D2D",
+                        "&:hover": { backgroundColor: "#000" }
+                      }}
+                    >
+                      Confirm Changes
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      onClick={() => setEditMode(true)}
+                      sx={{
+                        flex: 1,
+                        backgroundColor: "#2D2D2D",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        borderRadius: "12px",
+                        border: "3px solid #2D2D2D",
+                        boxShadow: "4px 4px 0px #DCD6FF",
+                        "&:hover": { transform: "translate(-2px, -2px)", boxShadow: "6px 6px 0px #DCD6FF" }
+                      }}
+                    >
+                      Edit Profile
+                    </Button>
+                  )}
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={logout}
+                    sx={{
+                      borderRadius: "12px",
+                      border: "3px solid #2D2D2D",
+                      fontWeight: "bold",
+                      color: "#2D2D2D",
+                      "&:hover": { backgroundColor: "#FFE0E0", borderColor: "#2D2D2D" }
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </Stack>
+              </CardContent>
+            </Grid>
+          </Grid>
+        </Card>
+      </Container>
+    </Box>
   );
 };
 

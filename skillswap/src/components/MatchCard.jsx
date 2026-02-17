@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Avatar, Typography, Box, Chip, IconButton, Button } from "@mui/material";
+import { Grid, Card, CardContent, Avatar, Typography, Box, Chip, IconButton } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EmailIcon from "@mui/icons-material/Email";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -42,22 +42,27 @@ const MatchCard = ({ match }) => {
 
   return (
     <Card
+      elevation={0}
       sx={{
         width: 360,
-        borderRadius: 4,
+        borderRadius: "24px",
         overflow: "hidden",
-        background: "#E3FDFD", // Updated to match the palette
-        color: "#443627",
-        boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.1)",
-        transition: "transform 0.3s ease",
-        "&:hover": { transform: "scale(1.05)" },
+        backgroundColor: "#ffffff",
+        border: "3px solid #2D2D2D", // High contrast border
+        boxShadow: "10px 10px 0px #DCD6FF", // Offset solid shadow
+        transition: "all 0.2s ease",
+        "&:hover": { 
+          transform: "translate(-4px, -4px)",
+          boxShadow: "14px 14px 0px #DCD6FF" 
+        },
       }}
     >
-      {/* Header Section */}
+      {/* Profile Header Block */}
       <Box
         sx={{
-          background: "#71C9CE", // Primary color
-          padding: 2,
+          backgroundColor: "#FFF9D6", // Pale Lemon block
+          padding: 3,
+          borderBottom: "3px solid #2D2D2D",
           textAlign: "center",
         }}
       >
@@ -65,132 +70,119 @@ const MatchCard = ({ match }) => {
           src={user.profilePic || "https://via.placeholder.com/100"}
           alt={user.username}
           sx={{
-            width: 100,
-            height: 100,
-            border: "3px solid #E3FDFD",
+            width: 90,
+            height: 90,
+            border: "3px solid #2D2D2D",
             margin: "auto",
+            backgroundColor: "#fff"
           }}
         />
         <Typography
           variant="h6"
-          sx={{
-            fontWeight: "bold",
-            color: "#ffffff", // White text for contrast
-            mt: 1,
-          }}
+          sx={{ fontWeight: 900, color: "#2D2D2D", mt: 2 }}
         >
           {user.username || "Unknown User"}
         </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            color: "#CBF1F5", // Light text for subtitle
-          }}
-        >
-          Skill Exchanger
-        </Typography>
+        <Chip 
+          label="Skill Exchanger" 
+          size="small"
+          sx={{ 
+            mt: 1, 
+            backgroundColor: "#2D2D2D", 
+            color: "#fff", 
+            fontWeight: "bold",
+            borderRadius: "6px"
+          }} 
+        />
       </Box>
 
-      {/* Content Section */}
-      <CardContent sx={{ textAlign: "center", padding: 3 }}>
-        {/* Email */}
-        {user.email && (
-          <Box display="flex" alignItems="center" justifyContent="center" mt={1}>
-            <EmailIcon sx={{ color: "#71C9CE", fontSize: 18, mr: 0.5 }} />
-            <Typography variant="body2" color="#443627">
-              {user.email}
-            </Typography>
-          </Box>
-        )}
-
-        {/* Location */}
-        {user.location && (
-          <Box display="flex" alignItems="center" justifyContent="center" mt={1}>
-            <LocationOnIcon sx={{ color: "#71C9CE", fontSize: 18, mr: 0.5 }} />
-            <Typography variant="body2" color="#443627">
-              {user.location}
-            </Typography>
-          </Box>
-        )}
-
-        {/* Social Links */}
-        <Box display="flex" justifyContent="center" mt={2} gap={1}>
-          {socialLinks.github && (
-            <IconButton component="a" href={socialLinks.github} target="_blank" sx={{ color: "#443627" }}>
-              <GitHubIcon />
-            </IconButton>
+      <CardContent sx={{ padding: 3 }}>
+        {/* Bio Info Section */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'center', mb: 2 }}>
+          {user.email && (
+            <Box display="flex" alignItems="center">
+              <EmailIcon sx={{ color: "#2D2D2D", fontSize: 18, mr: 1 }} />
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>{user.email}</Typography>
+            </Box>
           )}
-          {socialLinks.linkedin && (
-            <IconButton component="a" href={socialLinks.linkedin} target="_blank" sx={{ color: "#0077B5" }}>
-              <LinkedInIcon />
-            </IconButton>
-          )}
-          {socialLinks.twitter && (
-            <IconButton component="a" href={socialLinks.twitter} target="_blank" sx={{ color: "#1DA1F2" }}>
-              <TwitterIcon />
-            </IconButton>
+          {user.location && (
+            <Box display="flex" alignItems="center">
+              <LocationOnIcon sx={{ color: "#2D2D2D", fontSize: 18, mr: 1 }} />
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>{user.location}</Typography>
+            </Box>
           )}
         </Box>
 
-        {/* Mutual Skills */}
-        <Typography variant="subtitle2" mt={3} sx={{ fontWeight: "bold", color: "#443627" }}>
-          Mutual Skills:
-        </Typography>
-        <Box display="flex" justifyContent="center" flexWrap="wrap" gap={1} mt={1}>
-          {mutualSkills.map((skill, index) => (
-            <Chip
-              key={index}
-              label={skill}
-              sx={{
-                background: "#71C9CE",
-                color: "#ffffff",
-                fontSize: "12px",
-                fontWeight: "bold",
-              }}
-            />
+        {/* Social Bar */}
+        <Box display="flex" justifyContent="center" gap={1} mb={3}>
+          {['github', 'linkedin', 'twitter'].map((platform) => (
+            socialLinks[platform] && (
+              <IconButton 
+                key={platform}
+                component="a" 
+                href={socialLinks[platform]} 
+                target="_blank" 
+                sx={{ 
+                  border: '2px solid #2D2D2D', 
+                  borderRadius: '8px',
+                  color: "#2D2D2D",
+                  "&:hover": { backgroundColor: "#E0F9F1" }
+                }}
+              >
+                {platform === 'github' && <GitHubIcon />}
+                {platform === 'linkedin' && <LinkedInIcon />}
+                {platform === 'twitter' && <TwitterIcon />}
+              </IconButton>
+            )
           ))}
         </Box>
 
-        {/* Skills Needed */}
-        <Typography variant="subtitle2" mt={3} sx={{ fontWeight: "bold", color: "#443627" }}>
-          Skills They Need:
-        </Typography>
-        <Box display="flex" justifyContent="center" flexWrap="wrap" gap={1} mt={1}>
-          {reverseMatch.map((skill, index) => (
-            <Chip
-              key={index}
-              label={skill}
-              sx={{
-                background: "#CBF1F5",
-                color: "#443627",
-                fontSize: "12px",
-                fontWeight: "bold",
-              }}
-            />
-          ))}
-        </Box>
+        {/* Skill Blocks */}
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="caption" sx={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Mutual Skills
+            </Typography>
+            <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
+              {mutualSkills.map((skill, i) => (
+                <Chip key={i} label={skill} sx={{ border: '2px solid #2D2D2D', backgroundColor: '#E0F9F1', fontWeight: 'bold', borderRadius: '8px' }} />
+              ))}
+            </Box>
+          </Grid>
+          
+          <Grid item xs={12} mt={1}>
+            <Typography variant="caption" sx={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1 }}>
+              They Need
+            </Typography>
+            <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
+              {reverseMatch.map((skill, i) => (
+                <Chip key={i} label={skill} sx={{ border: '2px solid #2D2D2D', backgroundColor: '#DCD6FF', fontWeight: 'bold', borderRadius: '8px' }} />
+              ))}
+            </Box>
+          </Grid>
+        </Grid>
 
-        {/* Match Status */}
-        <Box mt={3}>
-          <Chip
-            label={matchStatus === "matched" ? "Matched" : "Pending"}
-            sx={{
-              backgroundColor: matchStatus === "matched" ? "#71C9CE" : "#A6E3E9",
-              color: "#ffffff",
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "6px 12px",
-              borderRadius: "16px",
+        {/* Status & Action */}
+        <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box 
+            sx={{ 
+              backgroundColor: matchStatus === "matched" ? "#E0F9F1" : "#F0F0F0",
+              border: '2px solid #2D2D2D',
+              borderRadius: '12px',
+              py: 1,
+              textAlign: 'center',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              fontSize: '0.75rem'
             }}
-          />
-        </Box>
-
-        {/* Skill Request Button */}
-        {matchStatus === "pending" && (
-          <Box mt={3}>
-            <SkillRequestButton receiver={user} />
+          >
+            Status: {matchStatus}
           </Box>
-        )}
+
+          {matchStatus === "pending" && (
+            <SkillRequestButton receiver={user} />
+          )}
+        </Box>
       </CardContent>
     </Card>
   );

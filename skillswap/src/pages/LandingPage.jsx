@@ -1,240 +1,175 @@
 import React from "react";
-import { Container, Grid, Typography, Button, Box } from "@mui/material";
+import { 
+  Container, 
+  Grid, 
+  Typography, 
+  Button, 
+  Box, 
+  Paper,
+  Chip
+} from "@mui/material";
+import { Facebook, Instagram, Psychology, Chat, VerifiedUser } from "@mui/icons-material";
+import XIcon from "@mui/icons-material/X";
+
+// Assets
 import heroImage from "../assets/Hero_finalbg.png";
 import feature1 from "../assets/f1bg.png";
 import feature2 from "../assets/f2bg.png";
 import feature3 from "../assets/f3bg.png";
-import { Facebook, Instagram } from "@mui/icons-material";
-import XIcon from "@mui/icons-material/X";
 
 const features = [
   {
     image: feature1,
-    title: "Advanced Skill Matching System",
-    description:
-      "Our intelligent algorithm helps you find the perfect match based on your skills, ensuring a seamless skill exchange.",
+    bgColor: "#DCD6FF", // Lavender
+    title: "Smart Match",
+    description: "Our algorithm finds your skill soulmate based on mutual growth goals.",
   },
   {
     image: feature2,
-    title: "Instant & Secure Real-Time Chat",
-    description:
-      "Communicate effortlessly with real-time chat designed with end-to-end encryption.",
+    bgColor: "#E0F9F1", // Mint
+    title: "Secure Chat",
+    description: "Real-time, encrypted communication built for creative collaboration.",
   },
   {
     image: feature3,
-    title: "Reliable & Verified Transactions",
-    description:
-      "Skill exchanges are monitored to ensure safety, transparency, and fairness.",
+    bgColor: "#FFF9D6", // Lemon
+    title: "Verified Trust",
+    description: "Every exchange is backed by our community safety and transparency protocol.",
   },
 ];
 
 const LandingPage = () => {
   return (
-    <Container maxWidth="lg">
-      {/* Hero Section */}
-      <Grid container spacing={4} alignItems="center" sx={{ py: 8 }}>
-        {/* Left Side - Image */}
-        <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
-          <img
-            src={heroImage}
-            alt="Hero"
-            style={{
-              width: "100%",
-              maxWidth: "450px",
-              borderRadius: "12px",
-              //boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.1)",
-            }}
-          />
-        </Grid>
+    <Box sx={{ backgroundColor: "#ffffff", minHeight: "100vh" }}>
+      
+      {/* HERO SECTION - PLAYFUL & OPEN */}
+      <Box sx={{ pt: { xs: 8, md: 12 }, pb: { xs: 8, md: 10 } }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={8} alignItems="center">
+            <Grid item xs={12} md={6}>
+              {/* Floating Tag Style */}
+              <Chip 
+                label="#CollaborativeLearning" 
+                sx={{ 
+                  mb: 3, 
+                  backgroundColor: "#FFF9D6", 
+                  fontWeight: "bold", 
+                  border: "2px solid #2D2D2D",
+                  borderRadius: "8px" 
+                }} 
+              />
+              <Typography variant="h1" sx={{ 
+                fontWeight: 900, 
+                fontSize: { xs: "2.8rem", md: "4rem" }, 
+                color: "#2D2D2D",
+                lineHeight: 1.1,
+                mb: 3 
+              }}>
+                Empower Your Growth with <span style={{ textDecoration: 'underline', textDecorationColor: '#DCD6FF' }}>SkillSwap</span>
+              </Typography>
+              <Typography variant="h6" sx={{ mb: 4, color: "#555", fontWeight: 400, lineHeight: 1.6 }}>
+                Manage your learning journey and connect with global talent from one simple platform.
+              </Typography>
+              
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#2D2D2D",
+                    color: "#fff",
+                    px: 4, py: 1.5, borderRadius: "10px", fontWeight: "bold", textTransform: "none",
+                    "&:hover": { backgroundColor: "#000" }
+                  }}
+                >
+                  Start a free trial
+                </Button>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    borderColor: "#2D2D2D", color: "#2D2D2D", px: 4, py: 1.5,
+                    borderRadius: "10px", fontWeight: "bold", textTransform: "none",
+                    borderWidth: "2px",
+                    "&:hover": { borderWidth: "2px", backgroundColor: "rgba(0,0,0,0.02)" }
+                  }}
+                >
+                  Book a live demo
+                </Button>
+              </Box>
+            </Grid>
 
-        {/* Right Side - Text & Buttons */}
-        <Grid item xs={12} md={6}>
-          <Typography
-            variant="h2"
-            sx={{
-              fontWeight: "bold",
-              color: "#443627", // Dark brown for better contrast
-              mb: 2,
-              lineHeight: 1.2,
-            }}
-          >
-            Collaborate, Learn & Grow
-          </Typography>
-          <Typography
-            variant="h5"
-            sx={{
-              mb: 3,
-              color: "#5C4A38", // Slightly darker shade for secondary text
-              lineHeight: 1.6,
-            }}
-          >
-            Unlock endless opportunities by exchanging skills with talented individuals worldwide.
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              mb: 4,
-              color: "#443627", // Dark brown for better readability
-              lineHeight: 1.8,
-            }}
-          >
-            Join a vibrant community where learning is mutual, and knowledge is shared effortlessly. Start swapping skills today!
-          </Typography>
-
-          {/* Buttons */}
-          <Box sx={{ display: "flex", gap: 2 }}>
-                    <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#00796B", // Darker teal for better contrast
-              color: "#ffffff",
-              px: 4,
-              py: 1.5,
-              fontSize: "1rem",
-              fontWeight: "bold",
-              borderRadius: "8px",
-              "&:hover": { backgroundColor: "#004D40" }, // Even darker teal on hover
-            }}
-          >
-            Get Started
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{
-              borderColor: "#00796B", // Darker teal for better contrast
-              color: "#00796B",
-              px: 4,
-              py: 1.5,
-              fontSize: "1rem",
-              fontWeight: "bold",
-              borderRadius: "8px",
-              "&:hover": {
-                backgroundColor: "#00796B",
-                color: "#ffffff",
-                borderColor: "#00796B",
-              },
-            }}
-          >
-            Learn More
-          </Button>
-          </Box>
-        </Grid>
-      </Grid>
-
-      {/* Features Section */}
-      <Box
-        sx={{
-          py: 8,
-          backgroundColor: "#E3FDFD", // Background color
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          borderRadius: "12px",
-          //boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.1)",
-          mt: 6,
-        }}
-      >
-        <Box sx={{ maxWidth: "1200px", width: "100%", px: 3 }}>
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: "bold",
-              textAlign: "center",
-              mb: 6,
-              color: "#443627", // Dark brown for better contrast
-            }}
-          >
-            Why Choose SkillSwap?
-          </Typography>
-
-          <Grid container spacing={4} justifyContent="center" alignItems="center">
-            {features.map((feature, index) => (
-              <Grid
-                item
-                xs={12}
-                sm={4}
-                key={index}
+            <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center", position: 'relative' }}>
+              {/* The "Zoomsphere" Style floating elements */}
+              <Box
+                component="img"
+                src={heroImage}
+                alt="Hero"
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  textAlign: "center",
-                  p: 2,
+                  width: "100%",
+                  maxWidth: "500px",
+                  borderRadius: "20px",
+                  border: "3px solid #2D2D2D",
+                  boxShadow: "12px 12px 0px #DCD6FF" // Hard shadow style
                 }}
-              >
-                <Box
+              />
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* WHY CHOOSE SECTION - ASYMMETRIC COLOR BLOCKS */}
+      <Box sx={{ py: 10, borderTop: '2px solid #F0F0F0' }}>
+        <Container maxWidth="lg">
+          <Typography variant="h4" sx={{ fontWeight: 900, textAlign: "center", mb: 8, color: "#2D2D2D" }}>
+            Explore our solutions
+          </Typography>
+
+          <Grid container spacing={4}>
+            {features.map((feature, index) => (
+              <Grid item xs={12} md={4} key={index}>
+                <Paper 
+                  elevation={0}
                   sx={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    p: 4, height: "100%", borderRadius: "24px",
+                    backgroundColor: feature.bgColor,
+                    border: "2px solid #2D2D2D",
+                    transition: "transform 0.2s ease",
+                    "&:hover": { transform: "rotate(-2deg)" } // Playful rotation
                   }}
                 >
-                  <img
-                    src={feature.image}
-                    alt={feature.title}
-                    style={{
-                      maxWidth: "100%",
-                      height: "auto",
-                      objectFit: "contain",
-                      borderRadius: "8px",
-                      //boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                    }}
-                  />
-                </Box>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: "bold",
-                    mt: 3,
-                    color: "#443627", // Dark brown for better readability
-                  }}
-                >
-                  {feature.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    maxWidth: "90%",
-                    mt: 1,
-                    color: "#5C4A38", // Slightly darker shade for secondary text
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {feature.description}
-                </Typography>
+                  <Box sx={{ mb: 3, display: "flex", justifyContent: "center" }}>
+                    <img
+                      src={feature.image}
+                      alt={feature.title}
+                      style={{ width: "100%", height: "140px", objectFit: "contain", borderRadius: "12px" }}
+                    />
+                  </Box>
+                  <Typography variant="h6" sx={{ fontWeight: 900, mb: 1, color: "#2D2D2D" }}>
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#2D2D2D", opacity: 0.8, lineHeight: 1.7 }}>
+                    {feature.description}
+                  </Typography>
+                </Paper>
               </Grid>
             ))}
           </Grid>
-        </Box>
+        </Container>
       </Box>
 
-      {/* Footer */}
-      <Box
-        sx={{
-          textAlign: "center",
-          py: 4,
-          borderTop: "1px solid #CBF1F5", // Paper color
-          backgroundColor: "#E3FDFD", // Background color
-          mt: 6,
-        }}
-      >
-        <Typography
-          variant="body2"
-          sx={{
-            mb: 2,
-            color: "#443627", // Dark brown for better contrast
-          }}
-        >
-          &copy; {new Date().getFullYear()} SkillSwap - All Rights Reserved
-        </Typography>
-              <Box sx={{ display: "flex", justifyContent: "center", gap: "16px" }}>
-        <Facebook sx={{ color: "#004D40", cursor: "pointer", fontSize: 28 }} /> {/* Dark green */}
-        <XIcon sx={{ color: "#004D40", cursor: "pointer", fontSize: 28 }} />
-        <Instagram sx={{ color: "#004D40", cursor: "pointer", fontSize: 28 }} />
+      {/* FOOTER - CLEAN & LIGHT */}
+      <Box sx={{ py: 6, textAlign: "center", borderTop: '2px solid #F0F0F0' }}>
+        <Container maxWidth="lg">
+          <Box sx={{ display: "flex", justifyContent: "center", gap: 4, mb: 3 }}>
+            <Facebook sx={{ cursor: "pointer", color: "#2D2D2D", "&:hover": { color: "#DCD6FF" } }} />
+            <XIcon sx={{ cursor: "pointer", color: "#2D2D2D", "&:hover": { color: "#DCD6FF" } }} />
+            <Instagram sx={{ cursor: "pointer", color: "#2D2D2D", "&:hover": { color: "#DCD6FF" } }} />
+          </Box>
+          <Typography variant="body2" sx={{ color: "#888", fontWeight: "bold" }}>
+            &copy; {new Date().getFullYear()} SKILLSWAP. GROW TOGETHER.
+          </Typography>
+        </Container>
       </Box>
-      </Box>  
-    </Container>
+    </Box>
   );
 };
 

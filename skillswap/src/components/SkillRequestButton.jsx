@@ -7,13 +7,12 @@ import { db } from "../config/firebase";
 
 const SkillRequestButton = ({ receiver }) => {
     const { user } = useAuth();
-    const [status, setStatus] = useState("idle"); // idle, pending, matched
+    const [status, setStatus] = useState("idle"); 
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [message, setMessage] = useState("");
 
     if (!user || !receiver) return null;
 
-    // 🔄 Listen for Firestore updates in real-time
     useEffect(() => {
         const matchRequestsRef = collection(db, "matchRequests");
 
@@ -26,7 +25,7 @@ const SkillRequestButton = ({ receiver }) => {
         const unsubscribe = onSnapshot(q, (snapshot) => {
             if (!snapshot.empty) {
                 const requestData = snapshot.docs[0].data();
-                setStatus(requestData.status); // Automatically update status when Firestore changes
+                setStatus(requestData.status);
             }
         });
 
@@ -39,8 +38,20 @@ const SkillRequestButton = ({ receiver }) => {
         setOpenSnackbar(true);
 
         if (response.success) {
-            setStatus("pending"); // Temporary state until Firestore updates
+            setStatus("pending");
         }
+    };
+
+    // Shared base styles for the "Sticker" button look
+    const buttonBaseStyles = {
+        fontWeight: 900,
+        fontSize: "14px",
+        borderRadius: "12px",
+        padding: "10px 20px",
+        textTransform: "uppercase",
+        letterSpacing: "1px",
+        border: "3px solid #2D2D2D", // Thick solid border
+        transition: "all 0.2s ease",
     };
 
     return (
@@ -50,12 +61,10 @@ const SkillRequestButton = ({ receiver }) => {
                     variant="contained"
                     disabled
                     sx={{
-                        backgroundColor: "#4dabf7",
-                        color: "#fff",
-                        fontWeight: 500,
-                        fontSize: "14px",
-                        borderRadius: "6px",
-                        padding: "8px 12px",
+                        ...buttonBaseStyles,
+                        backgroundColor: "#E0F9F1 !important", // Mint
+                        color: "#2D2D2D !important",
+                        opacity: "1 !important", // MUI disabled buttons are usually transparent; we want it solid
                     }}
                 >
                     ✅ Matched!
@@ -65,46 +74,50 @@ const SkillRequestButton = ({ receiver }) => {
                     variant="contained"
                     disabled
                     sx={{
-                        backgroundColor: "gray",
-                        color: "#fff",
-                        fontWeight: 500,
-                        fontSize: "14px",
-                        borderRadius: "6px",
-                        padding: "8px 12px",
+                        ...buttonBaseStyles,
+                        backgroundColor: "#F0F0F0 !important", // Light Gray
+                        color: "#2D2D2D !important",
+                        opacity: "1 !important",
                     }}
                 >
                     ⏳ Pending...
                 </Button>
             ) : (
                 <Button
-                    variant="outlined"
+                    variant="contained"
+                    onClick={handleClick}
                     sx={{
-                        backgroundColor: "transparent",
+                        ...buttonBaseStyles,
+                        backgroundColor: "#2D2D2D",
                         color: "#fff",
-                        fontWeight: 500,
-                        fontSize: "14px",
-                        borderRadius: "6px",
-                        padding: "8px 12px",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
-                        transition: "all 0.2s ease-in-out",
+                        boxShadow: "4px 4px 0px #DCD6FF", // Small offset shadow
                         "&:hover": {
-                            backgroundColor: "rgba(255, 255, 255, 0.1)",
-                            border: "1px solid rgba(255, 255, 255, 0.5)",
+                            backgroundColor: "#000",
+                            transform: "translate(-2px, -2px)",
+                            boxShadow: "6px 6px 0px #DCD6FF",
                         },
                     }}
-                    onClick={handleClick}
                 >
-                    Send Skill Swap Request
+                    Swap Skills
                 </Button>
             )}
 
-            {/* Snackbar Notification */}
             <Snackbar
                 open={openSnackbar}
                 autoHideDuration={3000}
                 onClose={() => setOpenSnackbar(false)}
                 message={message}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                // Custom Snackbar styling to match theme
+                ContentProps={{
+                    sx: {
+                        backgroundColor: "#2D2D2D",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        borderRadius: "12px",
+                        border: "2px solid #DCD6FF"
+                    }
+                }}
             />
         </>
     );

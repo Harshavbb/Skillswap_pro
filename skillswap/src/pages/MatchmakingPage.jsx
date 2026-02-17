@@ -8,65 +8,70 @@ const MatchmakingPage = () => {
   const { user } = useAuth();
 
   return (
-    <Box sx={{ backgroundColor: "#E3FDFD", minHeight: "100vh" }}>
-      {/* Hero Section */}
+    <Box sx={{ backgroundColor: "#ffffff", minHeight: "100vh", pb: 10 }}>
+      {/* HERO SECTION - ZOOMSPhERE STYLE */}
       <Box
         sx={{
-          height: 400,
-          background: `url(${heroImage}) center/cover no-repeat`,
+          py: 8,
+          backgroundColor: "#DCD6FF", // Lavender Accent
+          borderBottom: "3px solid #2D2D2D",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
-          p: 4,
-          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <Box
-          sx={{
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            borderRadius: "12px",
-            p: 4,
-            maxWidth: "600px",
-          }}
-        >
-          <Typography
-            variant="h3"
-            fontWeight="bold"
+        <Container maxWidth="md">
+          <Box
             sx={{
-              color: "#71C9CE", // Primary color
-              mb: 2,
+              backgroundColor: "#ffffff",
+              border: "3px solid #2D2D2D",
+              borderRadius: "24px",
+              p: 6,
+              boxShadow: "12px 12px 0px #2D2D2D", // Signature hard shadow
             }}
           >
-            Find Your Perfect Skill Match
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              color: "#443627", // Dark brown for readability
-              lineHeight: 1.6,
-            }}
-          >
-            Discover talented individuals who share your passion for learning and growth. Start connecting and exchanging skills today!
-          </Typography>
-        </Box>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 900,
+                color: "#2D2D2D",
+                mb: 2,
+                letterSpacing: -1
+              }}
+            >
+              Find Your <span style={{ textDecoration: 'underline', textDecorationColor: '#FFF9D6' }}>Perfect Match</span>
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "#555",
+                fontWeight: 400,
+                lineHeight: 1.6,
+              }}
+            >
+              Discover talented individuals who share your passion for learning and growth. Start connecting today!
+            </Typography>
+          </Box>
+        </Container>
       </Box>
 
-      {/* Matches Section */}
-      <Container maxWidth="lg" sx={{ mt: 6 }}>
+      {/* MATCHES SECTION */}
+      <Container maxWidth="lg" sx={{ mt: 8 }}>
         <Typography
           variant="h4"
           sx={{
-            fontWeight: "bold",
-            color: "#443627", // Dark brown for better readability
-            mb: 4,
+            fontWeight: 900,
+            color: "#2D2D2D",
+            mb: 6,
             textAlign: "center",
           }}
         >
           Your Skill Matches
         </Typography>
-        <Grid container spacing={4}>
-          {/* MatchList Component */}
+        
+        {/* Fix for centering the MatchList */}
+        <Grid container justifyContent="center">
           <Grid item xs={12}>
             <MatchList currentUser={user} />
           </Grid>
