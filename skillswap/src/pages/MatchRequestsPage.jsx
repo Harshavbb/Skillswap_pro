@@ -7,11 +7,14 @@ import {
   Card,
   Typography,
   Box,
+  Grid,
   Stack,
   Divider,
   Avatar,
   IconButton,
-  Container
+  Container,
+  Button,
+  Chip
 } from "@mui/material";
 import { CheckCircle, Cancel, HourglassEmpty } from "@mui/icons-material";
 
@@ -49,82 +52,117 @@ const MatchRequestsPage = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: "#ffffff", minHeight: "100vh", py: 8 }}>
+    <Box sx={{ backgroundColor: "#FAFAFA", minHeight: "100vh", py: 8 }}>
       <Container maxWidth="lg">
-        <Typography variant="h3" sx={{ mb: 6, color: "#2D2D2D", textAlign: "center", fontWeight: 900 }}>
-          Request Dashboard
-        </Typography>
+        <Box sx={{ mb: 6 }}>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: "#18181B", letterSpacing: "-0.02em" }}>
+            Request Dashboard
+          </Typography>
+          <Typography variant="body2" sx={{ color: "#71717A", mt: 1 }}>
+            Manage your incoming connections and monitor sent requests.
+          </Typography>
+        </Box>
         
-        <Box sx={{ display: "flex", gap: 6, flexDirection: { xs: "column", md: "row" } }}>
-          
+        <Grid container spacing={4}>
           {/* Incoming Column */}
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ mb: 3, p: 1, backgroundColor: "#E0F9F1", border: "2px solid #2D2D2D", borderRadius: "8px", textAlign: "center" }}>
-               <Typography variant="h6" sx={{ fontWeight: 900, color: "#2D2D2D" }}>Incoming</Typography>
-            </Box>
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#52525B", mb: 2, textTransform: "uppercase", fontSize: "0.75rem", letterSpacing: "0.05em" }}>
+              Incoming Requests ({incomingRequests.length})
+            </Typography>
             
             {incomingRequests.length > 0 ? (
-              <Stack spacing={3}>
+              <Stack spacing={2}>
                 {incomingRequests.map((req) => (
                   <Card key={req.id} elevation={0} sx={{
-                    p: 2, display: "flex", alignItems: "center", gap: 2,
-                    border: "3px solid #2D2D2D", borderRadius: "16px",
-                    boxShadow: "6px 6px 0px #E0F9F1"
+                    p: 2.5, display: "flex", alignItems: "center", gap: 2,
+                    border: "1px solid #E4E4E7", borderRadius: "12px",
+                    backgroundColor: "#FFFFFF"
                   }}>
-                    <Avatar src={req.senderProfilePic} sx={{ border: "2px solid #2D2D2D" }} />
+                    <Avatar src={req.senderProfilePic} sx={{ width: 44, height: 44, border: "1px solid #F4F4F5" }} />
                     <Box sx={{ flexGrow: 1 }}>
-                      <Typography variant="body1" sx={{ fontWeight: 900 }}>{req.senderName}</Typography>
-                      <Typography variant="caption" sx={{ color: "#888" }}>Wants to swap skills</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 600, color: "#18181B" }}>{req.senderName}</Typography>
+                      <Typography variant="caption" sx={{ color: "#71717A" }}>Wants to exchange expertise</Typography>
                     </Box>
                     {req.status === "pending" ? (
-                      <Stack direction="row">
-                        <IconButton onClick={() => acceptRequest(req.id)} sx={{ color: "#2D2D2D", "&:hover": { color: "#2E7D32" } }}><CheckCircle /></IconButton>
-                        <IconButton onClick={() => rejectRequest(req.id)} sx={{ color: "#2D2D2D", "&:hover": { color: "#D32F2F" } }}><Cancel /></IconButton>
+                      <Stack direction="row" spacing={1}>
+                        <Button 
+                          size="small" 
+                          onClick={() => acceptRequest(req.id)} 
+                          variant="contained" 
+                          sx={{ 
+                            backgroundColor: "#18181B", 
+                            color: "#FFF", 
+                            textTransform: "none", 
+                            fontSize: "0.75rem",
+                            px: 2,
+                            "&:hover": { backgroundColor: "#3F3F46" } 
+                          }}
+                        >
+                          Accept
+                        </Button>
+                        <Button 
+                          size="small" 
+                          onClick={() => rejectRequest(req.id)} 
+                          variant="outlined" 
+                          sx={{ 
+                            borderColor: "#E4E4E7", 
+                            color: "#EF4444", 
+                            textTransform: "none", 
+                            fontSize: "0.75rem",
+                            "&:hover": { backgroundColor: "#FEF2F2", borderColor: "#FCA5A5" } 
+                          }}
+                        >
+                          Decline
+                        </Button>
                       </Stack>
                     ) : (
-                      <Typography variant="caption" sx={{ fontWeight: 900, color: "#2E7D32" }}>MATCHED</Typography>
+                      <Chip label="Matched" size="small" sx={{ backgroundColor: "#F0FDF4", color: "#166534", fontWeight: 700, borderRadius: "6px" }} />
                     )}
                   </Card>
                 ))}
               </Stack>
             ) : (
-              <Typography sx={{ textAlign: "center", fontStyle: "italic", mt: 4 }}>All caught up!</Typography>
+              <Box sx={{ p: 4, textAlign: "center", border: "1px dashed #E4E4E7", borderRadius: "12px" }}>
+                <Typography variant="body2" sx={{ color: "#A1A1AA" }}>No active incoming requests.</Typography>
+              </Box>
             )}
-          </Box>
+          </Grid>
 
           {/* Outgoing Column */}
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ mb: 3, p: 1, backgroundColor: "#DCD6FF", border: "2px solid #2D2D2D", borderRadius: "8px", textAlign: "center" }}>
-               <Typography variant="h6" sx={{ fontWeight: 900, color: "#2D2D2D" }}>Outgoing</Typography>
-            </Box>
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#52525B", mb: 2, textTransform: "uppercase", fontSize: "0.75rem", letterSpacing: "0.05em" }}>
+              Sent Requests ({outgoingRequests.length})
+            </Typography>
             
             {outgoingRequests.length > 0 ? (
-              <Stack spacing={3}>
+              <Stack spacing={2}>
                 {outgoingRequests.map((req) => (
                   <Card key={req.id} elevation={0} sx={{
-                    p: 2, display: "flex", alignItems: "center", gap: 2,
-                    border: "3px solid #2D2D2D", borderRadius: "16px",
-                    boxShadow: "6px 6px 0px #DCD6FF"
+                    p: 2.5, display: "flex", alignItems: "center", gap: 2,
+                    border: "1px solid #E4E4E7", borderRadius: "12px",
+                    backgroundColor: "#FFFFFF"
                   }}>
-                    <Avatar src={req.receiverProfilePic} sx={{ border: "2px solid #2D2D2D" }} />
+                    <Avatar src={req.receiverProfilePic} sx={{ width: 44, height: 44, border: "1px solid #F4F4F5" }} />
                     <Box sx={{ flexGrow: 1 }}>
-                      <Typography variant="body1" sx={{ fontWeight: 900 }}>{req.receiverName}</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 600, color: "#18181B" }}>{req.receiverName}</Typography>
+                      <Typography variant="caption" sx={{ color: "#71717A" }}>Waiting for confirmation</Typography>
                     </Box>
                     <Box sx={{ textAlign: 'right' }}>
                        {req.status === "matched" ? 
-                         <CheckCircle sx={{ color: "#2E7D32" }} /> : 
-                         <HourglassEmpty sx={{ color: "#888" }} />
+                         <Chip label="Connected" size="small" variant="outlined" sx={{ borderColor: "#22C55E", color: "#16A34A", fontWeight: 600 }} /> : 
+                         <Chip label="Pending" size="small" variant="outlined" sx={{ borderColor: "#E4E4E7", color: "#71717A", fontWeight: 600 }} />
                        }
                     </Box>
                   </Card>
                 ))}
               </Stack>
             ) : (
-              <Typography sx={{ textAlign: "center", fontStyle: "italic", mt: 4 }}>No requests sent yet.</Typography>
+              <Box sx={{ p: 4, textAlign: "center", border: "1px dashed #E4E4E7", borderRadius: "12px" }}>
+                <Typography variant="body2" sx={{ color: "#A1A1AA" }}>You haven't sent any requests yet.</Typography>
+              </Box>
             )}
-          </Box>
-
-        </Box>
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );

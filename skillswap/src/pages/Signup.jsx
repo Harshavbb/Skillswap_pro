@@ -9,6 +9,8 @@ import {
   CircularProgress,
   Typography,
   Card,
+  Container,
+  Stack,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -31,33 +33,29 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const steps = ["Basic Info", "Add Bio", "Social Media"];
+  const steps = ["Account Details", "Professional Bio", "Network Links"];
 
-  // 📌 Validation Function
   const validate = () => {
     let newErrors = {};
-
     if (activeStep === 0) {
       if (!formData.username || formData.username.length < 3)
-        newErrors.username = "Username must be at least 3 characters";
+        newErrors.username = "Minimum 3 characters required";
       if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email))
-        newErrors.email = "Invalid email address";
+        newErrors.email = "Valid email required";
       if (!formData.password || formData.password.length < 6)
-        newErrors.password = "Password must be at least 6 characters";
+        newErrors.password = "Minimum 6 characters required";
       if (!formData.location)
         newErrors.location = "Location is required";
     }
-
     if (activeStep === 2) {
       const urlPattern = /^(ftp|http|https):\/\/[^ "]+$/;
       if (formData.linkedin && !urlPattern.test(formData.linkedin))
-        newErrors.linkedin = "Invalid LinkedIn URL";
+        newErrors.linkedin = "Invalid URL";
       if (formData.github && !urlPattern.test(formData.github))
-        newErrors.github = "Invalid GitHub URL";
+        newErrors.github = "Invalid URL";
       if (formData.twitter && !urlPattern.test(formData.twitter))
-        newErrors.twitter = "Invalid Twitter URL";
+        newErrors.twitter = "Invalid URL";
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -67,7 +65,7 @@ const Signup = () => {
       if (activeStep === steps.length - 1) {
         await handleSignup();
       } else {
-        setActiveStep((prevStep) => prevStep + 1);
+        setActiveStep((prev) => prev + 1);
       }
     }
   };
@@ -82,7 +80,6 @@ const Signup = () => {
       );
       const userId = userCredential.user.uid;
 
-      // Store user data in Firestore
       await setDoc(doc(db, "users", userId), {
         username: formData.username,
         email: formData.email,
@@ -97,6 +94,7 @@ const Signup = () => {
           twitter: formData.twitter || null,
         },
         rating: null,
+        createdAt: new Date(),
       });
 
       navigate("/dashboard");
@@ -107,310 +105,166 @@ const Signup = () => {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#E3FDFD", // Light teal background
-        padding: 3,
-      }}
-    >
-      <Card
-        sx={{
-          width: "100%",
-          maxWidth: "600px",
-          padding: 4,
-          borderRadius: 5,
-          boxShadow: 6,
-          backgroundColor: "#ffffff", // White background for contrast
-        }}
-      >
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          textAlign="center"
-          mb={3}
-          sx={{ color: "#443627" }} // Dark brown text
+    <Box sx={{ backgroundColor: "#F9FAFB", minHeight: "100vh", display: "flex", alignItems: "center", py: 4 }}>
+      <Container maxWidth="sm">
+        <Card
+          elevation={0}
+          sx={{
+            p: { xs: 3, md: 5 },
+            borderRadius: "12px",
+            border: "1px solid #E5E7EB",
+            backgroundColor: "#FFFFFF",
+          }}
         >
-          Create Your Account
-        </Typography>
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Typography variant="h4" sx={{ fontWeight: 800, color: "#111827", letterSpacing: "-0.025em" }}>
+              Join SkillSwap
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#6B7280", mt: 1 }}>
+              Complete the steps to set up your professional profile.
+            </Typography>
+          </Box>
 
-        <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
-          {steps.map((label, index) => (
-            <Step key={index}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+          <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 5 }}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel
+                  StepIconProps={{
+                    sx: {
+                      "&.Mui-active": { color: "#2563EB" },
+                      "&.Mui-completed": { color: "#2563EB" },
+                    },
+                  }}
+                >
+                  <Typography variant="caption" sx={{ fontWeight: 600 }}>{label}</Typography>
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
 
-        {/* Form Inputs */}
-        <Box>
-          {activeStep === 0 && (
-            <>
-              <TextField
-                label="Username *"
-                fullWidth
-                margin="normal"
-                value={formData.username}
-                onChange={(e) =>
-                  setFormData({ ...formData, username: e.target.value })
-                }
-                error={!!errors.username}
-                helperText={errors.username}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#00796B", // Teal border
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#004D40", // Darker teal on hover
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#004D40", // Darker teal when focused
-                    },
-                  },
-                }}
-              />
-              <TextField
-                label="Email *"
-                type="email"
-                fullWidth
-                margin="normal"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                error={!!errors.email}
-                helperText={errors.email}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#00796B",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#004D40",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#004D40",
-                    },
-                  },
-                }}
-              />
-              <TextField
-                label="Password *"
-                type="password"
-                fullWidth
-                margin="normal"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                error={!!errors.password}
-                helperText={errors.password}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#00796B",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#004D40",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#004D40",
-                    },
-                  },
-                }}
-              />
-              <TextField
-                label="Location *"
-                fullWidth
-                margin="normal"
-                value={formData.location}
-                onChange={(e) =>
-                  setFormData({ ...formData, location: e.target.value })
-                }
-                error={!!errors.location}
-                helperText={errors.location}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#00796B",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#004D40",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#004D40",
-                    },
-                  },
-                }}
-              />
-            </>
-          )}
+          <Stack spacing={2.5}>
+            {activeStep === 0 && (
+              <>
+                <TextField
+                  label="Username"
+                  fullWidth
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  error={!!errors.username}
+                  helperText={errors.username}
+                />
+                <TextField
+                  label="Email"
+                  type="email"
+                  fullWidth
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  error={!!errors.email}
+                  helperText={errors.email}
+                />
+                <TextField
+                  label="Password"
+                  type="password"
+                  fullWidth
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  error={!!errors.password}
+                  helperText={errors.password}
+                />
+                <TextField
+                  label="Location"
+                  fullWidth
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  error={!!errors.location}
+                  helperText={errors.location}
+                />
+              </>
+            )}
 
-          {activeStep === 1 && (
-            <TextField
-              label="Bio"
-              multiline
-              rows={4}
-              fullWidth
-              margin="normal"
-              value={formData.bio}
-              onChange={(e) =>
-                setFormData({ ...formData, bio: e.target.value })
-              }
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#00796B",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#004D40",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#004D40",
-                  },
-                },
-              }}
-            />
-          )}
+            {activeStep === 1 && (
+              <TextField
+                label="Professional Bio"
+                multiline
+                rows={5}
+                fullWidth
+                placeholder="Briefly describe your expertise and what you're looking to learn..."
+                value={formData.bio}
+                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+              />
+            )}
 
-          {activeStep === 2 && (
-            <>
-              <TextField
-                label="LinkedIn"
-                fullWidth
-                margin="normal"
-                value={formData.linkedin}
-                onChange={(e) =>
-                  setFormData({ ...formData, linkedin: e.target.value })
-                }
-                error={!!errors.linkedin}
-                helperText={errors.linkedin}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#00796B",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#004D40",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#004D40",
-                    },
-                  },
-                }}
-              />
-              <TextField
-                label="GitHub"
-                fullWidth
-                margin="normal"
-                value={formData.github}
-                onChange={(e) =>
-                  setFormData({ ...formData, github: e.target.value })
-                }
-                error={!!errors.github}
-                helperText={errors.github}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#00796B",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#004D40",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#004D40",
-                    },
-                  },
-                }}
-              />
-              <TextField
-                label="Twitter"
-                fullWidth
-                margin="normal"
-                value={formData.twitter}
-                onChange={(e) =>
-                  setFormData({ ...formData, twitter: e.target.value })
-                }
-                error={!!errors.twitter}
-                helperText={errors.twitter}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#00796B",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#004D40",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#004D40",
-                    },
-                  },
-                }}
-              />
-            </>
-          )}
-        </Box>
+            {activeStep === 2 && (
+              <>
+                <TextField
+                  label="LinkedIn Profile URL"
+                  fullWidth
+                  value={formData.linkedin}
+                  onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                  error={!!errors.linkedin}
+                  helperText={errors.linkedin}
+                />
+                <TextField
+                  label="GitHub Profile URL"
+                  fullWidth
+                  value={formData.github}
+                  onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+                  error={!!errors.github}
+                  helperText={errors.github}
+                />
+                <TextField
+                  label="Twitter (X) Profile URL"
+                  fullWidth
+                  value={formData.twitter}
+                  onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
+                  error={!!errors.twitter}
+                  helperText={errors.twitter}
+                />
+              </>
+            )}
+          </Stack>
 
-        {/* Buttons */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-          {activeStep > 0 && (
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 5 }}>
             <Button
+              disabled={activeStep === 0}
               onClick={() => setActiveStep((prev) => prev - 1)}
-              variant="outlined"
               sx={{
-                borderColor: "#00796B", // Teal border
-                color: "#00796B",
-                borderRadius: 3,
-                padding: "8px 16px",
-                "&:hover": {
-                  backgroundColor: "#00796B",
-                  color: "#ffffff",
-                },
+                textTransform: "none",
+                fontWeight: 600,
+                color: "#4B5563",
+                "&:disabled": { color: "#D1D5DB" },
               }}
             >
-              Back
+              Previous
             </Button>
-          )}
-          {activeStep < steps.length - 1 ? (
+            
             <Button
               variant="contained"
               onClick={handleNext}
-              sx={{
-                backgroundColor: "#00796B", // Teal background
-                color: "white",
-                borderRadius: 3,
-                padding: "8px 16px",
-                "&:hover": {
-                  backgroundColor: "#004D40", // Darker teal on hover
-                },
-              }}
-            >
-              Next
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              onClick={handleSignup}
               disabled={loading}
               sx={{
-                backgroundColor: "#00796B",
-                color: "white",
-                borderRadius: 3,
-                padding: "8px 16px",
-                "&:hover": {
-                  backgroundColor: "#004D40",
-                },
+                backgroundColor: "#111827",
+                color: "#FFFFFF",
+                px: 4,
+                py: 1.2,
+                borderRadius: "6px",
+                textTransform: "none",
+                fontWeight: 600,
+                boxShadow: "none",
+                "&:hover": { backgroundColor: "#374151", boxShadow: "none" },
               }}
             >
-              {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Finish"}
+              {loading ? (
+                <CircularProgress size={20} sx={{ color: "#FFFFFF" }} />
+              ) : activeStep === steps.length - 1 ? (
+                "Create Profile"
+              ) : (
+                "Continue"
+              )}
             </Button>
-          )}
-        </Box>
-      </Card>
+          </Box>
+        </Card>
+      </Container>
     </Box>
   );
 };

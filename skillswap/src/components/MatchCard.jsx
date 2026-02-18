@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Card, CardContent, Avatar, Typography, Box, Chip, IconButton } from "@mui/material";
+import { Grid, Card, CardContent, Avatar, Typography, Box, Chip, IconButton, Stack, Divider } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import EmailIcon from "@mui/icons-material/Email";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -15,7 +14,7 @@ const MatchCard = ({ match }) => {
   const [matchStatus, setMatchStatus] = useState("pending");
 
   if (!match || !match.user) {
-    return <p>Loading user details...</p>;
+    return null;
   }
 
   const { user, mutualSkills = [], reverseMatch = [], socialLinks = {} } = match;
@@ -44,145 +43,110 @@ const MatchCard = ({ match }) => {
     <Card
       elevation={0}
       sx={{
-        width: 360,
-        borderRadius: "24px",
-        overflow: "hidden",
-        backgroundColor: "#ffffff",
-        border: "3px solid #2D2D2D", // High contrast border
-        boxShadow: "10px 10px 0px #DCD6FF", // Offset solid shadow
-        transition: "all 0.2s ease",
+        width: "100%",
+        maxWidth: 380,
+        borderRadius: "12px",
+        border: "1px solid #E4E4E7",
+        backgroundColor: "#FFFFFF",
+        transition: "all 0.2s ease-in-out",
         "&:hover": { 
-          transform: "translate(-4px, -4px)",
-          boxShadow: "14px 14px 0px #DCD6FF" 
+          borderColor: "#2563EB",
+          boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
         },
       }}
     >
-      {/* Profile Header Block */}
-      <Box
-        sx={{
-          backgroundColor: "#FFF9D6", // Pale Lemon block
-          padding: 3,
-          borderBottom: "3px solid #2D2D2D",
-          textAlign: "center",
-        }}
-      >
-        <Avatar
-          src={user.profilePic || "https://via.placeholder.com/100"}
-          alt={user.username}
-          sx={{
-            width: 90,
-            height: 90,
-            border: "3px solid #2D2D2D",
-            margin: "auto",
-            backgroundColor: "#fff"
-          }}
-        />
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 900, color: "#2D2D2D", mt: 2 }}
-        >
-          {user.username || "Unknown User"}
-        </Typography>
-        <Chip 
-          label="Skill Exchanger" 
-          size="small"
-          sx={{ 
-            mt: 1, 
-            backgroundColor: "#2D2D2D", 
-            color: "#fff", 
-            fontWeight: "bold",
-            borderRadius: "6px"
-          }} 
-        />
-      </Box>
+      <CardContent sx={{ p: 3 }}>
+        {/* Profile Header */}
+        <Stack direction="row" spacing={2} alignItems="center" mb={2.5}>
+          <Avatar
+            src={user.profilePic || ""}
+            sx={{
+              width: 64,
+              height: 64,
+              border: "1px solid #F4F4F5",
+              backgroundColor: "#F8FAFC"
+            }}
+          />
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 700, color: "#18181B", lineHeight: 1.2 }}>
+              {user.username || "Anonymous"}
+            </Typography>
+            <Typography variant="caption" sx={{ color: "#71717A", display: "flex", alignItems: "center", mt: 0.5 }}>
+              <LocationOnIcon sx={{ fontSize: 14, mr: 0.5 }} />
+              {user.location || "Remote"}
+            </Typography>
+          </Box>
+        </Stack>
 
-      <CardContent sx={{ padding: 3 }}>
-        {/* Bio Info Section */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'center', mb: 2 }}>
-          {user.email && (
-            <Box display="flex" alignItems="center">
-              <EmailIcon sx={{ color: "#2D2D2D", fontSize: 18, mr: 1 }} />
-              <Typography variant="body2" sx={{ fontWeight: 500 }}>{user.email}</Typography>
-            </Box>
-          )}
-          {user.location && (
-            <Box display="flex" alignItems="center">
-              <LocationOnIcon sx={{ color: "#2D2D2D", fontSize: 18, mr: 1 }} />
-              <Typography variant="body2" sx={{ fontWeight: 500 }}>{user.location}</Typography>
-            </Box>
-          )}
-        </Box>
+        <Divider sx={{ mb: 2.5, borderColor: "#F4F4F5" }} />
 
-        {/* Social Bar */}
-        <Box display="flex" justifyContent="center" gap={1} mb={3}>
-          {['github', 'linkedin', 'twitter'].map((platform) => (
-            socialLinks[platform] && (
-              <IconButton 
-                key={platform}
-                component="a" 
-                href={socialLinks[platform]} 
-                target="_blank" 
-                sx={{ 
-                  border: '2px solid #2D2D2D', 
-                  borderRadius: '8px',
-                  color: "#2D2D2D",
-                  "&:hover": { backgroundColor: "#E0F9F1" }
-                }}
-              >
-                {platform === 'github' && <GitHubIcon />}
-                {platform === 'linkedin' && <LinkedInIcon />}
-                {platform === 'twitter' && <TwitterIcon />}
-              </IconButton>
-            )
-          ))}
-        </Box>
-
-        {/* Skill Blocks */}
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="caption" sx={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1 }}>
+        {/* Skill Matrix */}
+        <Stack spacing={2} mb={3}>
+          <Box>
+            <Typography variant="caption" sx={{ fontWeight: 700, color: "#18181B", textTransform: 'uppercase', letterSpacing: "0.05em" }}>
               Mutual Skills
             </Typography>
-            <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
+            <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
               {mutualSkills.map((skill, i) => (
-                <Chip key={i} label={skill} sx={{ border: '2px solid #2D2D2D', backgroundColor: '#E0F9F1', fontWeight: 'bold', borderRadius: '8px' }} />
+                <Chip 
+                  key={i} 
+                  label={skill} 
+                  size="small"
+                  sx={{ 
+                    backgroundColor: "#EFF6FF", 
+                    color: "#2563EB", 
+                    fontWeight: 600, 
+                    borderRadius: "6px",
+                    fontSize: "0.75rem"
+                  }} 
+                />
               ))}
             </Box>
-          </Grid>
-          
-          <Grid item xs={12} mt={1}>
-            <Typography variant="caption" sx={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1 }}>
-              They Need
-            </Typography>
-            <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
-              {reverseMatch.map((skill, i) => (
-                <Chip key={i} label={skill} sx={{ border: '2px solid #2D2D2D', backgroundColor: '#DCD6FF', fontWeight: 'bold', borderRadius: '8px' }} />
-              ))}
-            </Box>
-          </Grid>
-        </Grid>
-
-        {/* Status & Action */}
-        <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Box 
-            sx={{ 
-              backgroundColor: matchStatus === "matched" ? "#E0F9F1" : "#F0F0F0",
-              border: '2px solid #2D2D2D',
-              borderRadius: '12px',
-              py: 1,
-              textAlign: 'center',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              fontSize: '0.75rem'
-            }}
-          >
-            Status: {matchStatus}
           </Box>
+          
+          <Box>
+            <Typography variant="caption" sx={{ fontWeight: 700, color: "#52525B", textTransform: 'uppercase', letterSpacing: "0.05em" }}>
+              Looking For
+            </Typography>
+            <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
+              {reverseMatch.map((skill, i) => (
+                <Chip 
+                  key={i} 
+                  label={skill} 
+                  size="small"
+                  variant="outlined"
+                  sx={{ 
+                    borderColor: "#E4E4E7", 
+                    color: "#71717A", 
+                    fontWeight: 500, 
+                    borderRadius: "6px",
+                    fontSize: "0.75rem"
+                  }} 
+                />
+              ))}
+            </Box>
+          </Box>
+        </Stack>
 
-          {matchStatus === "pending" && (
+        {/* Social & Action Footer */}
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mt={3} pt={2} sx={{ borderTop: "1px solid #F4F4F5" }}>
+          <Stack direction="row" spacing={1}>
+            {socialLinks.github && (
+              <IconButton size="small" component="a" href={socialLinks.github} target="_blank" sx={{ color: "#71717A", "&:hover": { color: "#18181B" } }}>
+                <GitHubIcon fontSize="small" />
+              </IconButton>
+            )}
+            {socialLinks.linkedin && (
+              <IconButton size="small" component="a" href={socialLinks.linkedin} target="_blank" sx={{ color: "#0077B5" }}>
+                <LinkedInIcon fontSize="small" />
+              </IconButton>
+            )}
+          </Stack>
+          
+          <Box sx={{ width: "160px" }}>
             <SkillRequestButton receiver={user} />
-          )}
-        </Box>
+          </Box>
+        </Stack>
       </CardContent>
     </Card>
   );

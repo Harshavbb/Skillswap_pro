@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { sendMatchRequest } from "../utils/sendMatchRequest";
 import { useAuth } from "../context/AuthContext";
-import { Button, Snackbar } from "@mui/material";
+import { Button, Snackbar, Alert } from "@mui/material";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../config/firebase";
 
@@ -42,16 +42,17 @@ const SkillRequestButton = ({ receiver }) => {
         }
     };
 
-    // Shared base styles for the "Sticker" button look
+    // Shared base styles for the "Workable" professional look
     const buttonBaseStyles = {
-        fontWeight: 900,
-        fontSize: "14px",
-        borderRadius: "12px",
-        padding: "10px 20px",
-        textTransform: "uppercase",
-        letterSpacing: "1px",
-        border: "3px solid #2D2D2D", // Thick solid border
-        transition: "all 0.2s ease",
+        fontWeight: 600,
+        fontSize: "0.875rem",
+        borderRadius: "6px",
+        padding: "8px 16px",
+        textTransform: "none", // Professional tools avoid all-caps
+        letterSpacing: "0.025em",
+        transition: "all 0.2s ease-in-out",
+        boxShadow: "none",
+        width: "100%", // Fit to container
     };
 
     return (
@@ -62,12 +63,13 @@ const SkillRequestButton = ({ receiver }) => {
                     disabled
                     sx={{
                         ...buttonBaseStyles,
-                        backgroundColor: "#E0F9F1 !important", // Mint
-                        color: "#2D2D2D !important",
-                        opacity: "1 !important", // MUI disabled buttons are usually transparent; we want it solid
+                        backgroundColor: "#F0FDF4 !important", // Success Green (Light)
+                        color: "#166534 !important", // Success Green (Dark)
+                        border: "1px solid #BBF7D0",
+                        opacity: "1 !important",
                     }}
                 >
-                    ✅ Matched!
+                    Connected
                 </Button>
             ) : status === "pending" ? (
                 <Button
@@ -75,12 +77,13 @@ const SkillRequestButton = ({ receiver }) => {
                     disabled
                     sx={{
                         ...buttonBaseStyles,
-                        backgroundColor: "#F0F0F0 !important", // Light Gray
-                        color: "#2D2D2D !important",
+                        backgroundColor: "#F4F4F5 !important", // Zinc Gray
+                        color: "#71717A !important",
+                        border: "1px solid #E4E4E7",
                         opacity: "1 !important",
                     }}
                 >
-                    ⏳ Pending...
+                    Request Sent
                 </Button>
             ) : (
                 <Button
@@ -88,37 +91,37 @@ const SkillRequestButton = ({ receiver }) => {
                     onClick={handleClick}
                     sx={{
                         ...buttonBaseStyles,
-                        backgroundColor: "#2D2D2D",
-                        color: "#fff",
-                        boxShadow: "4px 4px 0px #DCD6FF", // Small offset shadow
+                        backgroundColor: "#18181B", // Zinc-950
+                        color: "#FFFFFF",
                         "&:hover": {
-                            backgroundColor: "#000",
-                            transform: "translate(-2px, -2px)",
-                            boxShadow: "6px 6px 0px #DCD6FF",
+                            backgroundColor: "#27272A",
+                            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                         },
                     }}
                 >
-                    Swap Skills
+                    Send Connection Request
                 </Button>
             )}
 
             <Snackbar
                 open={openSnackbar}
-                autoHideDuration={3000}
+                autoHideDuration={4000}
                 onClose={() => setOpenSnackbar(false)}
-                message={message}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                // Custom Snackbar styling to match theme
-                ContentProps={{
-                    sx: {
-                        backgroundColor: "#2D2D2D",
-                        color: "#fff",
-                        fontWeight: "bold",
-                        borderRadius: "12px",
-                        border: "2px solid #DCD6FF"
-                    }
-                }}
-            />
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+                <Alert 
+                    onClose={() => setOpenSnackbar(false)} 
+                    severity="success" 
+                    variant="filled"
+                    sx={{ 
+                        borderRadius: "8px", 
+                        backgroundColor: "#18181B",
+                        fontWeight: 500
+                    }}
+                >
+                    {message}
+                </Alert>
+            </Snackbar>
         </>
     );
 };

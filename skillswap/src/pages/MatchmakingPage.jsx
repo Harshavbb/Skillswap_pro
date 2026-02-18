@@ -2,76 +2,70 @@ import React from "react";
 import MatchList from "../components/MatchList";
 import { useAuth } from "../context/AuthContext";
 import { Container, Typography, Box, Grid } from "@mui/material";
-import heroImage from "../assets/Skill_matching.png";
 
 const MatchmakingPage = () => {
   const { user } = useAuth();
 
   return (
-    <Box sx={{ backgroundColor: "#ffffff", minHeight: "100vh", pb: 10 }}>
-      {/* HERO SECTION - ZOOMSPhERE STYLE */}
+    <Box sx={{ backgroundColor: "#FAFAFA", minHeight: "100vh", pb: 10 }}>
+      {/* HERO SECTION - CLEAN ENTERPRISE HEADER */}
       <Box
         sx={{
-          py: 8,
-          backgroundColor: "#DCD6FF", // Lavender Accent
-          borderBottom: "3px solid #2D2D2D",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          py: { xs: 8, md: 12 },
+          backgroundColor: "#FFFFFF",
+          borderBottom: "1px solid #E4E4E7",
           textAlign: "center",
         }}
       >
         <Container maxWidth="md">
-          <Box
+          <Typography
+            variant="h3"
             sx={{
-              backgroundColor: "#ffffff",
-              border: "3px solid #2D2D2D",
-              borderRadius: "24px",
-              p: 6,
-              boxShadow: "12px 12px 0px #2D2D2D", // Signature hard shadow
+              fontWeight: 800,
+              color: "#18181B",
+              mb: 2,
+              letterSpacing: "-0.03em",
+              fontSize: { xs: "2.2rem", md: "3rem" }
             }}
           >
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: 900,
-                color: "#2D2D2D",
-                mb: 2,
-                letterSpacing: -1
-              }}
-            >
-              Find Your <span style={{ textDecoration: 'underline', textDecorationColor: '#FFF9D6' }}>Perfect Match</span>
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                color: "#555",
-                fontWeight: 400,
-                lineHeight: 1.6,
-              }}
-            >
-              Discover talented individuals who share your passion for learning and growth. Start connecting today!
-            </Typography>
-          </Box>
+            Discover your <span style={{ color: "#2563EB" }}>next collaboration</span>
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: "#52525B",
+              fontWeight: 400,
+              lineHeight: 1.6,
+              maxWidth: "600px",
+              mx: "auto",
+              fontSize: "1.1rem"
+            }}
+          >
+            Our algorithm analyzes your expertise and growth goals to find the most compatible partners in the SkillSwap network.
+          </Typography>
         </Container>
       </Box>
 
       {/* MATCHES SECTION */}
       <Container maxWidth="lg" sx={{ mt: 8 }}>
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: 900,
-            color: "#2D2D2D",
-            mb: 6,
-            textAlign: "center",
-          }}
-        >
-          Your Skill Matches
-        </Typography>
+        <Box sx={{ mb: 6, textAlign: "flex-start" }}>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+              color: "#18181B",
+              mb: 1,
+            }}
+          >
+            Recommended for you
+          </Typography>
+          <Typography variant="body2" sx={{ color: "#71717A" }}>
+            Based on your skills offered and the technologies you want to acquire.
+          </Typography>
+        </Box>
         
-        {/* Fix for centering the MatchList */}
-        <Grid container justifyContent="center">
+        {/* MatchList Integration */}
+        <Grid container spacing={3}>
           <Grid item xs={12}>
             <MatchList currentUser={user} />
           </Grid>
